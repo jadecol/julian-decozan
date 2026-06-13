@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Julián de Ecozan · Arquitecto | Normativa Urbana & Desarrollo de Software</title>
+<meta name="description" content="Arquitecto con 12 años de experiencia en análisis normativo urbano, cabidas arquitectónicas y prefactibilidad inmobiliaria. Desarrollo de software propio para el sector AEC. Colombia.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+
+<!-- ─── TICKER BAR ──────────────────────────────── -->
+<div class="ticker-bar" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item highlight">Arquitecto · Normativa Urbana · Colombia</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">POT · Plan de Ordenamiento Territorial — Ley 388 de 1997</span><span class="ticker-sep">·</span>
+    <span class="ticker-item opportunity">Disponible · Asesorías · Proyectos de Impacto · Empleo</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Índice de Ocupación · Edificabilidad · Aprovechamiento del Suelo</span><span class="ticker-sep">·</span>
+    <span class="ticker-item highlight">Modernización de Entidades Públicas · GovTech · Transparencia Institucional</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Curadurías Urbanas · Licencias de Construcción · NSR-10</span><span class="ticker-sep">·</span>
+    <span class="ticker-item opportunity">ONGs en Territorio · Organismos Multilaterales · PNUD · BID · ONU-Hábitat</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Planes Parciales · Macroproyectos de Interés Social Nacional</span><span class="ticker-sep">·</span>
+    <span class="ticker-item highlight">CONPES 3919 · Construcción Sostenible en Colombia</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Due Diligence Inmobiliario · Certificados de Libertad y Tradición</span><span class="ticker-sep">·</span>
+    <span class="ticker-item opportunity">Escalar Procesos · Consultoría Estratégica · Impacto Territorial</span><span class="ticker-sep">·</span>
+    <span class="ticker-item highlight">Desarrollo de Software Propio · Java · Automatización AEC · PropTech</span><span class="ticker-sep">·</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="ticker-item highlight">Arquitecto · Normativa Urbana · Colombia</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">POT · Plan de Ordenamiento Territorial — Ley 388 de 1997</span><span class="ticker-sep">·</span>
+    <span class="ticker-item opportunity">Disponible · Asesorías · Proyectos de Impacto · Empleo</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Índice de Ocupación · Edificabilidad · Aprovechamiento del Suelo</span><span class="ticker-sep">·</span>
+    <span class="ticker-item highlight">Modernización de Entidades Públicas · GovTech · Transparencia Institucional</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Curadurías Urbanas · Licencias de Construcción · NSR-10</span><span class="ticker-sep">·</span>
+    <span class="ticker-item opportunity">ONGs en Territorio · Organismos Multilaterales · PNUD · BID · ONU-Hábitat</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Planes Parciales · Macroproyectos de Interés Social Nacional</span><span class="ticker-sep">·</span>
+    <span class="ticker-item highlight">CONPES 3919 · Construcción Sostenible en Colombia</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Due Diligence Inmobiliario · Certificados de Libertad y Tradición</span><span class="ticker-sep">·</span>
+    <span class="ticker-item opportunity">Escalar Procesos · Consultoría Estratégica · Impacto Territorial</span><span class="ticker-sep">·</span>
+    <span class="ticker-item highlight">Desarrollo de Software Propio · Java · Automatización AEC · PropTech</span><span class="ticker-sep">·</span>
+  </div>
+</div>
+
+<!-- ─── WHATSAPP FLOTANTE ──────────────────────── -->
+<div class="wa-float">
+  <div class="wa-tooltip">Escribir por WhatsApp</div>
+  <a href="https://wa.me/573112621281?text=Hola%20Juli%C3%A1n%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20conversar." class="wa-btn" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+</div>
+
+<!-- ─── NAV ────────────────────────────────────── -->
+<nav id="navbar">
+  <div class="wrap">
+    <div class="nav-brand">
+      <span class="nav-name">Julián de Ecozan</span>
+      <span class="nav-sub">Arq. · Normativa Urbana · Tech</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#en-accion">Herramientas</a></li>
+      <li><a href="#referencias">Referencias</a></li>
+      <li><a href="#perfil">Perfil</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <a href="#contacto" class="nav-cta">Contactar</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-line" aria-hidden="true"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-line"></span>
+      <span class="hero-eyebrow-text">Arquitecto · Colombia · Disponible</span>
+    </div>
+    <h1>Julián<br><strong>de Ecozan</strong></h1>
+    <div class="hero-role">
+      Análisis Normativo Urbano &nbsp;·&nbsp; Gestión Ambiental &nbsp;·&nbsp; Desarrollo de Software AEC &nbsp;·&nbsp; PropTech
+    </div>
+    <p class="hero-desc">
+      Arquitecto con 12 años de experiencia en análisis normativo urbano, cabidas arquitectónicas y prefactibilidad inmobiliaria. Dominio profundo de POT, planes parciales y gestión de licencias urbanísticas. Y además desarrollo software propio. Esa combinación no existe en otro perfil del sector.
+    </p>
+    <div class="hero-actions">
+      <a href="#contacto" class="btn-gold">Contactar &rarr;</a>
+      <a href="#referencias" class="btn-ghost">Ver referencias</a>
+    </div>
+  </div>
+
+  <div class="hero-right reveal">
+    <div class="hero-visual">
+
+      <!--
+        ═══════════════════════════════════════════════════
+        OPCIÓN A — VIDEO (recomendado para máximo impacto)
+        ═══════════════════════════════════════════════════
+        Descomenta este bloque y comenta el placeholder de abajo.
+        Coloca tu archivo de video en assets/hero-video.mp4
+        Formatos recomendados: MP4 (H.264) + WebM como fallback
+        Duración ideal: 15–45 segundos, loop
+        Resolución: 1280×720 px mínimo (16:9)
+
+        <div class="hero-video-wrap">
+          <div class="hero-video-label">En sitio · Colombia</div>
+          <video
+            id="heroVideo"
+            autoplay muted loop playsinline
+            poster="assets/hero-poster.jpg"
+          >
+            <source src="assets/hero-video.webm" type="video/webm">
+            <source src="assets/hero-video.mp4" type="video/mp4">
+          </video>
+          <div class="hero-video-frame" aria-hidden="true"></div>
+        </div>
+
+        ═══════════════════════════════════════════════════
+        OPCIÓN B — Animación externa (YouTube/Vimeo embed)
+        ═══════════════════════════════════════════════════
+        Para una animación arquitectónica o render cinemático.
+        Sustituye VIDEO_ID por el ID del video.
+
+        <div class="hero-video-wrap">
+          <div class="hero-video-label">Visualización arquitectónica</div>
+          <iframe
+            src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&mute=1&loop=1&controls=0&playlist=VIDEO_ID"
+            allow="autoplay; fullscreen"
+            style="width:100%;height:100%;border:none;"
+            loading="lazy"
+          ></iframe>
+          <div class="hero-video-frame" aria-hidden="true"></div>
+        </div>
+      -->
+
+      <!-- OPCIÓN C — Placeholder (reemplazar con A o B) -->
+      <div class="hero-img-placeholder">
+        <span class="ph-icon">🏗️</span>
+        <span class="ph-text">
+          Video en obra · Animación arquitectónica<br>
+          o Render de proyecto representativo<br><br>
+          Coloca tu archivo en assets/hero-video.mp4<br>
+          y descomenta la Opción A en el HTML
+        </span>
+      </div>
+
+      <div class="hero-badge">
+        <span class="hero-badge-num">12</span>
+        <span class="hero-badge-label">Años · Sector AEC</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS ───────────────────────────────────── -->
+<div class="stats-row">
+  <div class="wrap">
+    <div class="stat-item reveal">
+      <span class="stat-val count-up" data-target="12">0</span>
+      <span class="stat-lbl">Años de experiencia</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item reveal">
+      <span class="stat-val">POT</span>
+      <span class="stat-lbl">Planes parciales · Licencias</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item reveal">
+      <span class="stat-val">BIM</span>
+      <span class="stat-lbl">Revit · AutoCAD avanzado</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item reveal">
+      <span class="stat-val">Java</span>
+      <span class="stat-lbl">Desarrollo de sistemas propios</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SERVICIOS ───────────────────────────────── -->
+<section id="servicios">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text">Especialización</span></div>
+      <h2 class="sec-title">Áreas de <strong>servicio</strong></h2>
+      <p class="sec-desc">Un perfil único en el sector AEC que integra diseño, tecnología y gestión en una sola propuesta.</p>
+    </div>
+    <div class="servicios-grid">
+      <div class="servicio-card reveal">
+        <span class="srv-num">01</span>
+        <div class="srv-title">Análisis Normativo Urbano</div>
+        <p class="srv-desc">Interpretación y aplicación de POT, planes parciales y normas de usos del suelo para evaluar viabilidad normativa de predios y proyectos inmobiliarios desde la prefactibilidad.</p>
+        <div class="srv-tags"><span class="srv-tag">POT</span><span class="srv-tag">Planes Parciales</span><span class="srv-tag">Licencias</span></div>
+      </div>
+      <div class="servicio-card reveal">
+        <span class="srv-num">02</span>
+        <div class="srv-title">Cabidas & Prefactibilidad</div>
+        <p class="srv-desc">Desarrollo de cabidas arquitectónicas y escenarios de aprovechamiento del suelo considerando ocupación, edificabilidad y usos permitidos. Insumos técnicos para decisiones tempranas.</p>
+        <div class="srv-tags"><span class="srv-tag">Cabidas</span><span class="srv-tag">Edificabilidad</span><span class="srv-tag">Revit</span></div>
+      </div>
+      <div class="servicio-card reveal">
+        <span class="srv-num">03</span>
+        <div class="srv-title">Gestión Ambiental Urbana</div>
+        <p class="srv-desc">Análisis ambiental aplicado al desarrollo urbano sostenible. Identificación de restricciones y oportunidades normativas con impacto en la prefactibilidad de proyectos territoriales.</p>
+        <div class="srv-tags"><span class="srv-tag">Gestión Ambiental</span><span class="srv-tag">Territorio</span><span class="srv-tag">Sostenibilidad</span></div>
+      </div>
+      <div class="servicio-card reveal">
+        <span class="srv-num">04</span>
+        <div class="srv-title">Desarrollo de Software AEC</div>
+        <p class="srv-desc">Herramientas tecnológicas propias para digitalización de procesos urbanos, transparencia institucional y estructuración de activos territoriales. Automatización aplicada al sector constructor.</p>
+        <div class="srv-tags"><span class="srv-tag">Java</span><span class="srv-tag">IA</span><span class="srv-tag">PropTech</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EN ACCIÓN ───────────────────────────────── -->
+<section id="en-accion">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text">Herramientas propias</span></div>
+      <h2 class="sec-title">Tecnología <strong>en acción</strong></h2>
+      <p class="sec-desc">No solo uso herramientas — las construyo. Soluciones desarrolladas específicamente para el sector AEC.</p>
+    </div>
+    <div class="accion-grid">
+      <div class="accion-card featured reveal">
+        <div>
+          <div class="accion-tag">Herramienta #01</div>
+          <div class="accion-title">Sistema de revisión normativa con IA para certificados de libertad y tradición</div>
+          <p class="accion-desc">Sistema desarrollado en Java que cruza automáticamente la norma urbanística con certificados de libertad y tradición para validar viabilidad predial. Procesamiento con IA y tratamiento anonimizado de datos bajo estándares de privacidad. Aplicable a due diligence inmobiliario y gestión predial institucional.</p>
+          <div class="accion-metric">
+            <span class="accion-metric-val">IA</span>
+            <span class="accion-metric-label">Revisión normativa automatizada<br>con cruce de datos prediales</span>
+          </div>
+        </div>
+        <div class="accion-visual">
+          <span class="ph-icon">⚖️</span>
+          <span class="ph-text">Captura del sistema<br>o diagrama de flujo<br>800 × 500 px</span>
+        </div>
+      </div>
+      <div class="accion-card reveal">
+        <div class="accion-tag">Herramienta #02</div>
+        <div class="accion-title">Solución de digitalización de procesos urbanísticos</div>
+        <p class="accion-desc">Herramienta orientada a la transparencia institucional y trazabilidad en la gestión territorial. Diseñada para municipios y entidades públicas con enfoque en eficiencia administrativa.</p>
+        <div class="accion-metric">
+          <span class="accion-metric-val">Gov</span>
+          <span class="accion-metric-label">Municipios · Curadurías<br>Transparencia institucional</span>
+        </div>
+      </div>
+      <div class="accion-card reveal">
+        <div class="accion-tag">Herramienta #03</div>
+        <div class="accion-title">Plataforma de estructuración de activos territoriales</div>
+        <p class="accion-desc">Sistema propio para estructuración y gestión de activos inmobiliarios con enfoque en trazabilidad, verificación y confianza. Orientado a operadores del sector constructor y organismos de desarrollo territorial.</p>
+        <div class="accion-metric">
+          <span class="accion-metric-val">PropTech</span>
+          <span class="accion-metric-label">Activos inmobiliarios<br>estructurados digitalmente</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── VALOR DIFERENCIAL ───────────────────────── -->
+<section class="valor-bg">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text">Propuesta de valor</span></div>
+      <h2 class="sec-title">Por qué un perfil <strong>distinto</strong></h2>
+    </div>
+    <div class="valor-list">
+      <div class="valor-item reveal">
+        <span class="vi-num">01</span>
+        <div class="vi-title">Arquitecto que programa</div>
+        <p class="vi-desc">No necesito intermediarios entre la norma y la tecnología. Construyo las herramientas que el trabajo necesita — desde sistemas de revisión normativa con IA hasta plataformas de gestión territorial.</p>
+      </div>
+      <div class="valor-item reveal">
+        <span class="vi-num">02</span>
+        <div class="vi-title">Norma + diseño + código en un solo perfil</div>
+        <p class="vi-desc">Interpreto y aplico POT, planes parciales y normativa ambiental desde la prefactibilidad, evitando errores costosos. Y si el proceso es repetitivo, lo automatizo.</p>
+      </div>
+      <div class="valor-item reveal">
+        <span class="vi-num">03</span>
+        <div class="vi-title">Experiencia institucional real</div>
+        <p class="vi-desc">10 años en gestión técnica pública en Cundinamarca. Conozco las brechas del sistema desde adentro — y desarrollé soluciones tecnológicas para resolverlas, no para quejarme de ellas.</p>
+      </div>
+      <div class="valor-item reveal">
+        <span class="vi-num">04</span>
+        <div class="vi-title">Visión territorial de largo plazo</div>
+        <p class="vi-desc">Investigación activa en transición energética justa, minería territorial y soberanía energética. Un arquitecto que piensa en política pública con herramientas técnicas concretas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STACK TÉCNICO ───────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text">Stack técnico</span></div>
+      <h2 class="sec-title">Herramientas <strong>& lenguajes</strong></h2>
+    </div>
+    <div class="stack-cols">
+      <div class="reveal">
+        <div class="stack-group-title">Diseño & modelado</div>
+        <div class="stack-items">
+          <div class="stack-item"><span class="stack-dot dot-gold"></span><span class="stack-name">Revit (avanzado)</span></div>
+          <div class="stack-item"><span class="stack-dot dot-gold"></span><span class="stack-name">AutoCAD (avanzado)</span></div>
+          <div class="stack-item"><span class="stack-dot dot-gold"></span><span class="stack-name">Adobe Illustrator</span></div>
+          <div class="stack-item"><span class="stack-dot dot-gold"></span><span class="stack-name">Modelado arquitectónico BIM</span></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="stack-group-title">Desarrollo & programación</div>
+        <div class="stack-items">
+          <div class="stack-item"><span class="stack-dot dot-blue"></span><span class="stack-name">Java</span></div>
+          <div class="stack-item"><span class="stack-dot dot-blue"></span><span class="stack-name">Desarrollo de herramientas propias</span></div>
+          <div class="stack-item"><span class="stack-dot dot-blue"></span><span class="stack-name">Integración con IA</span></div>
+          <div class="stack-item"><span class="stack-dot dot-blue"></span><span class="stack-name">Automatización de procesos</span></div>
+          <div class="stack-item"><span class="stack-dot dot-blue"></span><span class="stack-name">Ingeniería de Software (en formación)</span></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="stack-group-title">Normativa & análisis territorial</div>
+        <div class="stack-items">
+          <div class="stack-item"><span class="stack-dot dot-gray"></span><span class="stack-name">POT y planes parciales</span></div>
+          <div class="stack-item"><span class="stack-dot dot-gray"></span><span class="stack-name">Licencias urbanísticas</span></div>
+          <div class="stack-item"><span class="stack-dot dot-gray"></span><span class="stack-name">Cabidas y edificabilidad</span></div>
+          <div class="stack-item"><span class="stack-dot dot-gray"></span><span class="stack-name">Gestión ambiental urbana</span></div>
+          <div class="stack-item"><span class="stack-dot dot-gray"></span><span class="stack-name">Prefactibilidad inmobiliaria</span></div>
+          <div class="stack-item"><span class="stack-dot dot-gray"></span><span class="stack-name">Política pública territorial</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CERTIFICACIONES ─────────────────────────── -->
+<section class="cert-bg">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text">Formación</span></div>
+      <h2 class="sec-title">Estudios & <strong>certificaciones</strong></h2>
+      <p class="sec-desc">Base académica y formación continua especializada en el sector AEC.</p>
+    </div>
+    <div class="cert-grid">
+      <div class="cert-card reveal">
+        <div class="cert-icon">🎓</div>
+        <div class="cert-title">Arquitectura</div>
+        <div class="cert-inst">[Universidad] · Colombia</div>
+        <div class="cert-year">Agregar año de grado</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🌿</div>
+        <div class="cert-title">Esp. Gestión Ambiental Urbana</div>
+        <div class="cert-inst">Especialización · [Universidad]</div>
+        <div class="cert-year">Agregar año de grado</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">💻</div>
+        <div class="cert-title">Ingeniería de Software</div>
+        <div class="cert-inst">[Universidad] · En curso</div>
+        <div class="cert-year">En formación</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🏛️</div>
+        <div class="cert-title">Derecho · Gestión Urbana · Planeación Territorial</div>
+        <div class="cert-inst">Formación complementaria</div>
+        <div class="cert-year">Estudios cursados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── REFERENCIAS (CARRUSEL) ──────────────────── -->
+<section id="referencias" class="test-bg">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text">Referencias</span></div>
+      <h2 class="sec-title">Lo que dicen <strong>quienes me conocen</strong></h2>
+      <p class="sec-desc">Profesionales del sector público, financiero, jurídico y empresarial que han visto el trabajo de cerca.</p>
+    </div>
+
+    <div class="carousel-outer reveal">
+      <div class="carousel-viewport" id="carouselViewport">
+        <div class="carousel-track" id="carouselTrack">
+
+          <div class="carousel-card">
+            <p class="test-quote">Julián combina algo que raramente se ve: dominio técnico de la norma urbana con capacidad real de construir soluciones tecnológicas para el territorio. Es el tipo de perfil que el sector público colombiano necesita para modernizarse desde adentro.</p>
+            <div class="test-author">
+              <span class="test-name">[Nombre · Confirmar]</span>
+              <span class="test-role">Ministra de Vivienda, Ciudad y Territorio · Colombia</span>
+            </div>
+          </div>
+
+          <div class="carousel-card">
+            <p class="test-quote">Tuve la oportunidad de conocer su trabajo en estructuración de activos territoriales. Su comprensión del componente financiero y normativo de los proyectos inmobiliarios, y su capacidad de automatizarlo con software propio, lo posiciona en un segmento muy diferenciado del mercado.</p>
+            <div class="test-author">
+              <span class="test-name">[Nombre · Confirmar]</span>
+              <span class="test-role">Presidente Financiero · Valorem S.A.</span>
+            </div>
+          </div>
+
+          <div class="carousel-card">
+            <p class="test-quote">Desde la perspectiva jurídica, su sistema de revisión normativa automatizada para certificados de libertad y tradición representa una herramienta de alto valor para due diligence inmobiliario. Reduce tiempos, minimiza errores y aporta trazabilidad a procesos que hoy dependen de revisión manual.</p>
+            <div class="test-author">
+              <span class="test-name">[Nombre · Confirmar]</span>
+              <span class="test-role">Abogado Financiero · [Firma]</span>
+            </div>
+          </div>
+
+          <div class="carousel-card">
+            <p class="test-quote">Su investigación sobre la crisis del sector minero en Cundinamarca y la necesidad de una transición energética justa es rigurosa y oportuna. Entiende el territorio no solo desde el diseño, sino desde sus implicaciones sociales, energéticas y económicas para las comunidades.</p>
+            <div class="test-author">
+              <span class="test-name">[Nombre · Confirmar]</span>
+              <span class="test-role">Representante Legal · [Empresa Minera · Cundinamarca]</span>
+            </div>
+          </div>
+
+        </div><!-- /carousel-track -->
+      </div><!-- /carousel-viewport -->
+
+      <!-- NAVEGACIÓN REDISEÑADA ──────────────── -->
+      <div class="carousel-nav-bar">
+        <div class="carousel-progress">
+          <div class="carousel-progress-track">
+            <div class="carousel-progress-fill" id="carouselProgressFill"></div>
+          </div>
+          <span class="carousel-counter" id="carouselCounter">
+            <span>01</span> / 02
+          </span>
+        </div>
+        <div class="carousel-arrows">
+          <button class="carousel-arrow" id="prevBtn" aria-label="Referencia anterior">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="carousel-arrow" id="nextBtn" aria-label="Siguiente referencia">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /carousel-outer -->
+  </div>
+</section>
+
+<!-- ─── PERFIL ──────────────────────────────────── -->
+<section id="perfil" class="perfil-bg">
+  <div class="wrap">
+    <div class="perfil-grid">
+      <div class="reveal">
+        <div class="perfil-photo-placeholder">
+          <span class="ph-icon">👤</span>
+          <span class="ph-text">Foto profesional<br>Julián de Ecozan<br><br>Retrato con fondo neutro<br>o en obra / proyecto<br>400 × 533 px</span>
+        </div>
+        <div class="perfil-caption">
+          <span class="perfil-caption-name">Julián de Ecozan</span>
+          <span class="perfil-caption-role">Arq. · Colombia</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="eyebrow" style="margin-bottom:14px">
+          <span class="eyebrow-line"></span><span class="eyebrow-text">Perfil profesional</span>
+        </div>
+        <h2 class="sec-title" style="margin-bottom:24px">Donde el territorio <strong>se convierte en código</strong></h2>
+        <div class="perfil-content">
+          <p>Soy Julián de Ecozan, arquitecto con Especialización en Gestión Ambiental Urbana y 12 años de experiencia en análisis normativo urbano, desarrollo de cabidas arquitectónicas, prefactibilidad inmobiliaria y gestión de licencias urbanísticas ante curadurías y entidades de control territorial.</p>
+          <p>Combino el rigor técnico del ordenamiento territorial — POT, planes parciales, normas de usos del suelo, edificabilidad y aprovechamiento — con capacidad real de desarrollo de software aplicado al sector AEC y la gestión urbana. He construido herramientas tecnológicas propias orientadas a la digitalización de procesos urbanos, la transparencia institucional y la estructuración de activos territoriales.</p>
+          <p>Formación complementaria en Derecho, Gestión Urbana y Planeación Territorial. Actualmente en formación como Ingeniero de Software. Investigación activa en transición energética justa y soberanía energética territorial en Colombia.</p>
+        </div>
+        <div class="perfil-skills">
+          <div class="perfil-skill">Análisis normativo urbano (POT, planes parciales)</div>
+          <div class="perfil-skill">Cabidas y prefactibilidad inmobiliaria</div>
+          <div class="perfil-skill">Gestión de licencias urbanísticas</div>
+          <div class="perfil-skill">Desarrollo de software propio (Java)</div>
+          <div class="perfil-skill">Gestión ambiental urbana especializada</div>
+          <div class="perfil-skill">Revit y AutoCAD avanzado</div>
+        </div>
+        <a href="assets/CV_Julian_de_Ecozan.pdf" class="cv-download" download>
+          <span class="cv-download-icon">↓</span>
+          Descargar CV en PDF
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACTO ─────────────────────────────────── -->
+<section id="contacto" class="contacto-bg">
+  <div class="wrap">
+    <div class="contacto-inner">
+      <div class="section-header reveal" style="margin-bottom:36px">
+        <div class="eyebrow" style="justify-content:center">
+          <span class="eyebrow-line"></span><span class="eyebrow-text">Contacto</span>
+        </div>
+        <h2 class="sec-title">¿Hablamos de <strong>tu proyecto?</strong></h2>
+        <p class="sec-desc">Disponible para posiciones en organismos multilaterales, entidades de planeación, consultoras de infraestructura, constructoras y empresas PropTech. Modalidad presencial, híbrida o remota.</p>
+      </div>
+      <div class="contacto-grid reveal">
+        <a href="mailto:jdecozantech@gmail.com" class="contacto-item">
+          <span class="ci-label">Correo</span>
+          <span class="ci-value">jdecozantech@gmail.com</span>
+          <span class="ci-action">Enviar mensaje</span>
+        </a>
+        <a href="https://wa.me/573112621281?text=Hola%20Juli%C3%A1n%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20conversar." class="contacto-item" target="_blank" rel="noopener">
+          <span class="ci-label">WhatsApp</span>
+          <span class="ci-value">+57 311 262 1281</span>
+          <span class="ci-action">Abrir chat directo</span>
+        </a>
+        <a href="https://www.linkedin.com/in/julian-de-ecozan" class="contacto-item" target="_blank" rel="noopener">
+          <span class="ci-label">LinkedIn</span>
+          <span class="ci-value">Julián de Ecozan</span>
+          <span class="ci-action">Ver perfil profesional</span>
+        </a>
+      </div>
+      <div class="disponible-badge reveal">
+        <span class="disponible-dot"></span>
+        Disponible para nuevas oportunidades
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ───────────────────────────────────── -->
+<footer>
+  <div class="wrap">
+    <span class="ft-copy">© 2026 · Julián de Ecozan · Arquitecto</span>
+    <span class="ft-tag">Normativa Urbana · BIM · Software · Colombia</span>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
