@@ -1477,18 +1477,25 @@ footer .wrap{
   *{animation-duration:0.01ms!important;transition-duration:0.01ms!important}
 }
 
-/* --- Ajuste de Accesibilidad Mobile para Botón Flotante --- */
+/* --- Ajuste UX Mobile para Botón Flotante y Footer --- */
 @media (max-width: 768px) {
-  body {
-    /* Añade espacio al final de la página para que el contenido no quede oculto bajo el botón */
-    padding-bottom: 80px;
+  /* Fuerza un espacio al final del documento para que el texto nunca quede oculto */
+  footer {
+    padding-bottom: 90px !important;
   }
 
+  /* Reduce el tamaño del botón y lo hace ligeramente transparente para lectura fluida */
   .wa-float {
-    /* Ajusta ligeramente el tamaño y posición en pantallas pequeñas */
-    bottom: 20px;
-    right: 20px;
-    transform: scale(0.9);
+    bottom: 15px;
+    right: 15px;
+    transform: scale(0.8);
     transform-origin: bottom right;
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Vuelve a ser 100% visible al tocarlo */
+  .wa-float:active {
+    opacity: 1;
   }
 }
