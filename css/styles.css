@@ -1476,3 +1476,19 @@ footer .wrap{
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:0.01ms!important;transition-duration:0.01ms!important}
 }
+
+/* --- Ajuste de Accesibilidad Mobile para Botón Flotante --- */
+@media (max-width: 768px) {
+  body {
+    /* Añade espacio al final de la página para que el contenido no quede oculto bajo el botón */
+    padding-bottom: 80px;
+  }
+
+  .wa-float {
+    /* Ajusta ligeramente el tamaño y posición en pantallas pequeñas */
+    bottom: 20px;
+    right: 20px;
+    transform: scale(0.9);
+    transform-origin: bottom right;
+  }
+}
