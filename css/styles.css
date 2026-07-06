@@ -68,7 +68,7 @@ body{
 }
 .ticker-item.highlight{color:var(--accent)}
 .ticker-item.opportunity{color:#6a9a7a}
-.ticker-sep{color:rgba(201,169,110,0.2);font-size:0.55rem;padding:0 4px}
+.ticker-sep{color:rgba(201,169,110,0.68);font-size:0.55rem;padding:0 4px}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 /* JS-controlled pause state (complementa el :hover existente) */
 .ticker-track.is-paused{animation-play-state:paused}
