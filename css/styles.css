@@ -1517,3 +1517,79 @@ footer .wrap{
     opacity: 1;
   }
 }
+
+/* ============================================
+   FOCUS VISIBLE — WCAG 2.4.7 / 2.4.11
+   Outline dorado (--accent) sobre fondos oscuros: ratio ≥8.6:1
+   Pattern moderno: oculta outline en clics de ratón, lo muestra
+   solo en navegación por teclado.
+   ============================================ */
+
+/* 1. Mostrar outline personalizado al navegar con teclado */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+/* 2. Suprimir outline en clics de ratón/touch (solo navegadores
+      que soporten :focus-visible; en los que no, se mantiene el
+      comportamiento nativo del navegador como fallback). */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Elementos con fondo propio dorado: el outline sobre fondo
+   adyacente oscuro ya pasa 8.6:1, pero reforzamos con offset. */
+.btn-gold:focus-visible,
+.nav-cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* Botones de interfaz sobre fondos muy oscuros */
+.carousel-arrow:focus-visible,
+.ticker-pause:focus-visible,
+.nav-burger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Ítems de contacto (tienen borde propio, aumentamos offset) */
+.contacto-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0px;
+  box-shadow: 0 0 0 4px rgba(201,169,110,0.15);
+}
+
+/* Skip link — necesita :focus además de :focus-visible para
+   garantizar visibilidad en todos los navegadores */
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 26px; /* debajo del ticker-bar */
+  outline: 2px solid var(--bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   SKIP LINK — WCAG 2.4.1
+   Primer elemento focusable: oculto visualmente hasta que
+   recibe foco por teclado.
+   ============================================ */
+.skip-link {
+  position: fixed;
+  top: -9999px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 9px 22px;
+  text-decoration: none;
+  border-radius: 0 0 2px 2px;
+  white-space: nowrap;
+  transition: top 0s;
+}
