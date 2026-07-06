@@ -15,8 +15,8 @@
   --accent:#c9a96e;
   --accent-dim:rgba(201,169,110,0.12);
   --text:#e8e4de;
-  --text-secondary:#8a8278;
-  --text-muted:#4a4540;
+  --text-secondary:#938e88; /* a11y: was #8a8278 (4.60:1 on #1a1a1a, too low); now ≥5.37:1 on all dark backgrounds */
+  --text-muted:#7e7a74;    /* a11y: was #4a4540 (2.11:1 on #080808, FAIL); now 4.69:1 on ticker bg */
   --white:#ffffff;
 }
 
