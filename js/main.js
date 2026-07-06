@@ -173,4 +173,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ─── HAMBURGUESA MOBILE (WCAG 2.1.1, 4.1.2) ────
+  const burger    = document.getElementById('navBurger');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  if (burger && mobileNav) {
+
+    function openMenu() {
+      mobileNav.classList.add('nav-open');
+      burger.setAttribute('aria-expanded', 'true');
+      burger.setAttribute('aria-label', 'Cerrar menú de navegación');
+      // Mueve el foco al primer link del menú
+      const firstLink = mobileNav.querySelector('a, button');
+      if (firstLink) firstLink.focus();
+    }
+
+    function closeMenu() {
+      mobileNav.classList.remove('nav-open');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.setAttribute('aria-label', 'Abrir menú de navegación');
+    }
+
+    // Abrir/cerrar con click del botón (Enter/Space nativo en <button>)
+    burger.addEventListener('click', () => {
+      const isOpen = burger.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('nav-open')) {
+        closeMenu();
+        burger.focus(); // devuelve foco al disparador
+      }
+    });
+
+    // Cerrar al hacer click fuera del nav
+    document.addEventListener('click', (e) => {
+      if (!navbar.contains(e.target) && mobileNav.classList.contains('nav-open')) {
+        closeMenu();
+      }
+    });
+  }
+
 });

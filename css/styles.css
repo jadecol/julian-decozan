@@ -116,6 +116,45 @@ nav .wrap{
 }
 .nav-cta:hover{background:#dbc07e}
 
+/* Nav menu wrapper — display:contents en desktop: los elementos
+   hijos fluyen directamente en el flexbox del .wrap, preservando
+   el layout existente sin ningún cambio visual en pantalla grande. */
+.nav-menu{display:contents}
+
+/* ── Hamburguesa — oculto en desktop ─────────── */
+.nav-burger{
+  display:none;
+  flex-shrink:0;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  width:36px;height:36px;
+  background:transparent;
+  border:1px solid var(--border);
+  cursor:pointer;
+  padding:8px;
+  transition:border-color 0.25s;
+}
+.nav-burger:hover{border-color:var(--accent)}
+.burger-line{
+  width:18px;height:1px;
+  background:var(--text);
+  display:block;
+  transition:transform 0.25s,opacity 0.25s;
+  transform-origin:center;
+}
+/* Animación X al abrir */
+.nav-burger[aria-expanded="true"] .burger-line:nth-child(1){
+  transform:translateY(6px) rotate(45deg);
+}
+.nav-burger[aria-expanded="true"] .burger-line:nth-child(2){
+  opacity:0;transform:scaleX(0);
+}
+.nav-burger[aria-expanded="true"] .burger-line:nth-child(3){
+  transform:translateY(-6px) rotate(-45deg);
+}
+
 /* ============================================
    LAYOUT UTILITIES
    ============================================ */
@@ -825,7 +864,50 @@ footer .wrap{
 @media(max-width:768px){
   .wrap{padding:0 20px}
   nav .wrap{padding:0 20px}
-  .nav-links,.nav-cta{display:none}
+  /* Hamburguesa visible en mobile */
+  .nav-burger{display:flex}
+  /* El nav-brand se expande para empujar la hamburguesa al borde */
+  .nav-brand{flex:1}
+  /* El wrap permite que el nav-menu salte a segunda fila */
+  nav .wrap{flex-wrap:wrap;align-items:center}
+  /* Panel de nav: colapsado por defecto (max-height:0 + overflow:hidden) */
+  .nav-menu{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    order:3;
+    max-height:0;
+    overflow:hidden;
+    padding:0;
+    transition:max-height 0.3s ease,padding 0.3s ease;
+  }
+  /* Panel abierto — activado por JS al añadir clase .nav-open */
+  .nav-menu.nav-open{
+    max-height:400px;
+    padding:16px 0 20px;
+    border-top:1px solid var(--border);
+    margin-top:10px;
+  }
+  /* Links dentro del panel mobile */
+  .nav-links{
+    flex-direction:column;
+    gap:0;
+  }
+  .nav-links li a{
+    padding:10px 0;
+    font-size:0.7rem;
+    display:block;
+    border-bottom:1px solid var(--border);
+  }
+  .nav-links li:last-child a{border-bottom:none}
+  /* CTA en mobile */
+  .nav-cta{
+    margin-top:16px;
+    text-align:center;
+    justify-content:center;
+    width:100%;
+    display:flex;
+  }
   .hero{padding:140px 0 60px}
   .servicios-grid,.cert-grid{grid-template-columns:1fr}
   .valor-list{grid-template-columns:1fr}
