@@ -216,4 +216,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ─── PAUSA DEL TICKER (WCAG 2.2.2) ────────────
+  const tickerPauseBtn = document.getElementById('tickerPause');
+  const tickerTrackEl  = document.getElementById('tickerTrack');
+
+  if (tickerPauseBtn && tickerTrackEl) {
+    tickerPauseBtn.addEventListener('click', () => {
+      const isPaused = tickerPauseBtn.getAttribute('aria-pressed') === 'true';
+      const nextState = !isPaused;
+
+      // Alterna clase CSS (coexiste con el :hover sin conflicto)
+      tickerTrackEl.classList.toggle('is-paused', nextState);
+
+      // Actualiza estado ARIA
+      tickerPauseBtn.setAttribute('aria-pressed', String(nextState));
+      tickerPauseBtn.setAttribute(
+        'aria-label',
+        nextState ? 'Reanudar animación del ticker' : 'Pausar animación del ticker'
+      );
+
+      // Actualiza ícono
+      const icon = tickerPauseBtn.querySelector('.ticker-pause__icon');
+      if (icon) icon.textContent = nextState ? '▶' : '⏸';
+    });
+  }
+
 });
