@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyecto Arjona — Memorando de Inversión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!--
+  IMÁGENES REQUERIDAS (portada tipo "acercamiento satelital"):
+  Coloca una carpeta "images/" junto a este archivo, con 5 fotografías/capturas
+  aéreas o satelitales de la ubicación, ordenadas de la vista más amplia a la
+  más cercana, con estos nombres exactos:
+    images/arjona-01.jpg   (vista regional / departamental)
+    images/arjona-02.jpg   (vista municipio de Arjona)
+    images/arjona-03.jpg   (vista del sector / vía de acceso)
+    images/arjona-04.jpg   (vista cercana del predio)
+    images/arjona-05.jpg   (vista más cercana — sobre esta queda el pin)
+  Si los archivos no existen, la portada muestra un degradado de respaldo.
+-->
+<style>
+  :root{
+    --navy: #0B1E30;
+    --navy-2: #122942;
+    --paper: #F4F1E8;
+    --paper-2: #ECE7D8;
+    --brass: #A07C3B;
+    --brass-light: #C9A36B;
+    --ink: #1D2430;
+    --ink-soft: #4B5563;
+    --green: #3A5A40;
+    --red: #93493A;
+    --rule: rgba(29,36,48,0.14);
+    --rule-dark: rgba(244,241,232,0.16);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html, body{height:100%; overflow:hidden;}
+  body{
+    font-family:'IBM Plex Sans', sans-serif;
+    color:var(--ink);
+    background:var(--navy);
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:'Newsreader', serif;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  /* ================= CARRUSEL ================= */
+  #deck{position:relative; width:100vw; height:100vh; overflow:hidden;}
+  #track{
+    display:flex;
+    height:100vh;
+    width:100%;
+    transition:transform .75s cubic-bezier(.65,0,.35,1);
+  }
+  .slide{
+    flex:0 0 100vw;
+    height:100vh;
+    overflow-y:auto;
+    padding:6.5vh 9vw;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+  }
+  .slide::-webkit-scrollbar{display:none;}
+
+  .dark{background:var(--navy); color:var(--paper);}
+  .dark .ink-soft{color:rgba(244,241,232,0.62);}
+  .light{background:var(--paper);}
+  .light .ink-soft{color:var(--ink-soft);}
+
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.02em;
+    color:var(--brass);
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    margin-bottom:1.6rem;
+  }
+  .kicker::before{content:""; width:22px; height:1px; background:var(--brass); display:inline-block;}
+
+  .slide-index{
+    position:absolute; bottom:4vh; right:9vw;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem; color:var(--ink-soft); letter-spacing:0.02em;
+  }
+  .dark .slide-index{color:rgba(244,241,232,0.5);}
+
+  h1.hero{
+    font-family:'Newsreader', serif; font-weight:500;
+    font-size:clamp(2.4rem, 5vw, 4.3rem); line-height:1.06; max-width:15ch;
+  }
+  h2.head{
+    font-family:'Newsreader', serif; font-weight:500;
+    font-size:clamp(1.7rem, 3vw, 2.5rem); line-height:1.14; max-width:17ch; margin-bottom:2rem;
+  }
+  .lede{
+    font-family:'Newsreader', serif; font-style:italic; font-size:1.1rem; line-height:1.6;
+    max-width:54ch; color:var(--ink-soft);
+  }
+  .rule{height:1px; background:var(--rule); width:100%; margin:1.8rem 0;}
+  .dark .rule{background:var(--rule-dark);}
+
+  /* ================= NAV: flechas + dots ================= */
+  .navctrl{position:fixed; z-index:80; top:50%; transform:translateY(-50%);}
+  .navctrl.prev{left:22px;} .navctrl.next{right:22px;}
+  .navctrl button{
+    width:42px; height:42px; border-radius:50%;
+    border:1px solid rgba(160,124,59,0.45);
+    background:rgba(11,30,48,0.35);
+    backdrop-filter:blur(6px);
+    color:var(--brass-light);
+    font-family:'IBM Plex Mono', monospace; font-size:1.1rem;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, transform .2s ease, opacity .2s ease;
+  }
+  .navctrl button:hover{background:rgba(160,124,59,0.25); transform:scale(1.06);}
+  .navctrl button:disabled{opacity:0.25; cursor:default;}
+  @media (max-width:700px){ .navctrl{display:none;} }
+
+  #dots{
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+    display:flex; gap:9px; z-index:80;
+    background:rgba(11,30,48,0.35); backdrop-filter:blur(6px);
+    padding:8px 12px; border-radius:20px;
+  }
+  #dots button{
+    width:6px; height:6px; border-radius:50%; border:none;
+    background:rgba(160,124,59,0.4); cursor:pointer; padding:0;
+    transition:background .25s ease, transform .25s ease;
+  }
+  #dots button.active{background:var(--brass-light); transform:scale(1.5);}
+
+  .progress-label{
+    position:fixed; top:22px; left:50%; transform:translateX(-50%);
+    font-family:'IBM Plex Mono', monospace; font-size:0.68rem; letter-spacing:0.06em;
+    color:rgba(244,241,232,0.55); z-index:80; pointer-events:none;
+  }
+
+  /* ================= COVER / ZOOM SATELITAL ================= */
+  .cover-slide{padding:0;}
+  .zoom-stage{position:absolute; inset:0; overflow:hidden; background:
+      radial-gradient(ellipse at 30% 20%, #16324d 0%, #0B1E30 55%, #081522 100%);}
+  .zoom-frame{
+    position:absolute; inset:0;
+    background-size:cover; background-position:center;
+    opacity:0; transform:scale(1);
+    transition:opacity 1.15s ease, transform 2.1s ease-out;
+  }
+  .zoom-frame.active{opacity:1;}
+  .zoom-frame[data-n="1"]{background-image:url('images/arjona-01.jpg');}
+  .zoom-frame[data-n="1"].active{transform:scale(1.09);}
+  .zoom-frame[data-n="2"]{background-image:url('images/arjona-02.jpg');}
+  .zoom-frame[data-n="2"].active{transform:scale(1.12);}
+  .zoom-frame[data-n="3"]{background-image:url('images/arjona-03.jpg');}
+  .zoom-frame[data-n="3"].active{transform:scale(1.14);}
+  .zoom-frame[data-n="4"]{background-image:url('images/arjona-04.jpg');}
+  .zoom-frame[data-n="4"].active{transform:scale(1.16);}
+  .zoom-frame[data-n="5"]{background-image:url('images/arjona-05.jpg');}
+  .zoom-frame[data-n="5"].active{transform:scale(1.2);}
+
+  .zoom-vignette{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(8,17,29,0.55) 0%, rgba(8,17,29,0.05) 30%, rgba(8,17,29,0.15) 55%, rgba(8,17,29,0.92) 100%);
+    pointer-events:none;
+  }
+  .scanlines{
+    position:absolute; inset:0; pointer-events:none; opacity:0.5;
+    background-image:repeating-linear-gradient(0deg, rgba(244,241,232,0.02) 0px, rgba(244,241,232,0.02) 1px, transparent 1px, transparent 3px);
+  }
+
+  .map-pin{
+    position:absolute; left:54%; top:47%;
+    opacity:0; transform:translate(-50%,-140%);
+    transition:opacity .5s ease, transform .6s cubic-bezier(.34,1.56,.64,1);
+    z-index:5;
+  }
+  .map-pin.show{opacity:1; transform:translate(-50%,-100%);}
+  .pin-dot{
+    width:13px; height:13px; border-radius:50%;
+    background:var(--brass-light);
+    box-shadow:0 0 0 3px rgba(244,241,232,0.9), 0 2px 10px rgba(0,0,0,0.5);
+    position:relative;
+  }
+  .pin-dot::after{
+    content:""; position:absolute; inset:-16px; border-radius:50%;
+    border:1.5px solid var(--brass-light); opacity:0;
+  }
+  .map-pin.show .pin-dot::after{animation:pinping 1.9s cubic-bezier(0,0,.2,1) infinite;}
+  @keyframes pinping{
+    0%{transform:scale(.3); opacity:.9;}
+    100%{transform:scale(3.2); opacity:0;}
+  }
+  .pin-stem{
+    width:1.5px; height:22px; background:var(--brass-light);
+    margin:0 auto; opacity:0.9;
+  }
+  .pin-label{
+    font-family:'IBM Plex Mono', monospace; font-size:0.62rem; letter-spacing:0.04em;
+    color:var(--paper); background:rgba(11,30,48,0.75); border:1px solid rgba(201,163,107,0.5);
+    padding:3px 7px; white-space:nowrap; position:absolute; top:-30px; left:50%; transform:translateX(-50%);
+  }
+
+  .cover-copy{
+    position:absolute; inset:0; z-index:6;
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:6vh 9vw; opacity:0; transition:opacity 1s ease .3s;
+  }
+  .cover-copy.show{opacity:1;}
+  .cover-top{display:flex; justify-content:space-between; align-items:flex-start;}
+  .brand{font-family:'IBM Plex Mono', monospace; font-size:0.75rem; letter-spacing:0.03em; color:rgba(244,241,232,0.75);}
+  .confid{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.04em; color:rgba(244,241,232,0.5); text-align:right; line-height:1.5;}
+  .cover-mid .eyebrow{font-family:'IBM Plex Mono', monospace; color:var(--brass-light); font-size:0.8rem; margin-bottom:1.1rem;}
+  .cover-bottom{display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid var(--rule-dark); padding-top:1.5rem;}
+  .cover-bottom .stat{font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:rgba(244,241,232,0.7);}
+  .cover-bottom .stat b{color:var(--paper); font-weight:500;}
+  .coords{
+    position:absolute; bottom:5.5vh; left:50%; transform:translateX(-50%);
+    font-family:'IBM Plex Mono', monospace; font-size:0.62rem; letter-spacing:0.08em;
+    color:rgba(244,241,232,0.4); opacity:0; transition:opacity 1s ease .6s;
+  }
+  .coords.show{opacity:1;}
+
+  /* ================= TABLAS ================= */
+  table{width:100%; border-collapse:collapse;}
+  th, td{padding:0.8rem 0.6rem; text-align:right; font-size:0.92rem; border-bottom:1px solid var(--rule);}
+  th:first-child, td:first-child{text-align:left;}
+  th{font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:0.7rem; letter-spacing:0.02em; color:var(--ink-soft); padding-bottom:0.85rem;}
+  td{font-family:'IBM Plex Mono', monospace; font-size:0.9rem;}
+  td:first-child{font-family:'IBM Plex Sans', sans-serif; font-size:0.92rem;}
+  tr.total td{border-top:1px solid var(--ink); border-bottom:none; font-weight:600; padding-top:0.95rem;}
+  tr.highlight td{color:var(--green); font-weight:600;}
+  .col-c{color:var(--brass); font-weight:600;}
+
+  /* ================= EXHIBITS (charts) ================= */
+  .exhibit-label{
+    font-family:'IBM Plex Mono', monospace; font-size:0.68rem; letter-spacing:0.05em;
+    color:var(--brass); text-transform:uppercase; margin-bottom:0.35rem;
+  }
+  .exhibit-title{font-family:'Newsreader', serif; font-size:1.15rem; font-weight:500; margin-bottom:1rem;}
+  .exhibit-source{
+    font-family:'IBM Plex Mono', monospace; font-size:0.64rem; color:var(--ink-soft);
+    margin-top:0.6rem; font-style:italic;
+  }
+  .exhibit-box{border:1px solid var(--rule); padding:1.4rem 1.4rem 1rem;}
+  svg text{font-family:'IBM Plex Mono', monospace;}
+  .axis-line{stroke:var(--ink); stroke-width:1;}
+  .grid-line{stroke:var(--rule); stroke-width:1;}
+  .tick-label{fill:var(--ink-soft); font-size:9px;}
+  .bar-value{fill:var(--ink); font-size:10px; font-weight:600;}
+  .cat-label{fill:var(--ink-soft); font-size:9px;}
+
+  /* ================= GRID / CARDS ================= */
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:2.6rem;}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:2.2rem;}
+  @media (max-width:820px){ .grid-2, .grid-3{grid-template-columns:1fr; gap:1.8rem;} }
+
+  .stat-block .num{font-family:'Newsreader', serif; font-size:2.5rem; font-weight:500; line-height:1;}
+  .stat-block .label{font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-soft); margin-top:0.55rem;}
+  .dark .stat-block .label{color:rgba(244,241,232,0.6);}
+
+  ul.plain{list-style:none;}
+  ul.plain li{position:relative; padding-left:1.3rem; margin-bottom:0.8rem; line-height:1.5; font-size:0.96rem;}
+  ul.plain li::before{content:"—"; position:absolute; left:0; color:var(--brass);}
+  .dark ul.plain li::before{color:var(--brass-light);}
+
+  .badge{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.03em;
+    padding:0.3rem 0.6rem; border:1px solid var(--brass); color:var(--brass); margin-bottom:1rem;
+  }
+  .dark .badge{border-color:var(--brass-light); color:var(--brass-light);}
+
+  .risk-flag{border-left:2px solid #8C3B2E; padding-left:1rem; margin-top:1.4rem;}
+  .risk-flag .risk-label{font-family:'IBM Plex Mono', monospace; font-size:0.68rem; color:#8C3B2E; letter-spacing:0.03em; margin-bottom:0.35rem;}
+
+  .unit-table td, .unit-table th{text-align:right;}
+  .unit-table td:first-child, .unit-table th:first-child{text-align:left;}
+
+  @media (max-width:700px){
+    .slide{padding:8vh 6vw;}
+    .grid-2{gap:1.6rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-label mono" id="progressLabel">01 / 11</div>
+
+<div class="navctrl prev"><button id="btnPrev" aria-label="Anterior">‹</button></div>
+<div class="navctrl next"><button id="btnNext" aria-label="Siguiente">›</button></div>
+<div id="dots"></div>
+
+<div id="deck">
+  <div id="track">
+
+    <!-- 1. COVER — ZOOM SATELITAL + PIN -->
+    <section class="slide dark cover-slide">
+      <div class="zoom-stage">
+        <div class="zoom-frame" data-n="1"></div>
+        <div class="zoom-frame" data-n="2"></div>
+        <div class="zoom-frame" data-n="3"></div>
+        <div class="zoom-frame" data-n="4"></div>
+        <div class="zoom-frame" data-n="5"></div>
+        <div class="scanlines"></div>
+        <div class="zoom-vignette"></div>
+        <div class="map-pin" id="mapPin">
+          <div class="pin-label">ARJONA · BOLÍVAR</div>
+          <div class="pin-dot"></div>
+          <div class="pin-stem"></div>
+        </div>
+      </div>
+      <div class="cover-copy" id="coverCopy">
+        <div class="cover-top">
+          <div class="brand">PROYECTO ARJONA · BOLÍVAR</div>
+          <div class="confid">ESTRICTAMENTE CONFIDENCIAL<br>USO EXCLUSIVO DEL DESTINATARIO</div>
+        </div>
+        <div class="cover-mid">
+          <div class="eyebrow">Memorando de inversión — Junio 2026</div>
+          <h1 class="hero">Un predio de 55.000&nbsp;m² en Arjona con tres caminos de rentabilidad.</h1>
+        </div>
+        <div class="cover-bottom">
+          <div class="stat">ÁREA DEL PREDIO<br><b>55.000 m²</b></div>
+          <div class="stat">UBICACIÓN<br><b>Arjona, Bolívar</b></div>
+          <div class="stat">UTILIDAD NETA — MEJOR ESCENARIO<br><b>$4.823.481.307 COP</b></div>
+        </div>
+      </div>
+      <div class="coords mono" id="coords">10.2547° N, 75.3453° O — ARJONA, BOLÍVAR, COLOMBIA</div>
+    </section>
+
+    <!-- 2. OPORTUNIDAD -->
+    <section class="slide light">
+      <div class="kicker">LA OPORTUNIDAD</div>
+      <h2 class="head">Un mismo activo, dos estrategias de valorización distintas.</h2>
+      <p class="lede">El predio ya cuenta con una estructura de costos de tierra y urbanismo definida bajo el modelo base (Escenario A). Sobre esa misma base, dos alternativas — Escenario B y Escenario C — multiplican la utilidad sin alterar la propiedad del terreno.</p>
+      <div class="rule"></div>
+      <div class="grid-3">
+        <div class="stat-block"><div class="num">18,3%</div><div class="label">MARGEN — ESCENARIO A (BASE)</div></div>
+        <div class="stat-block"><div class="num">31,1%</div><div class="label">MARGEN — ESCENARIO B</div></div>
+        <div class="stat-block"><div class="num" style="color:var(--brass)">38,6%</div><div class="label">MARGEN — ESCENARIO C</div></div>
+      </div>
+      <div class="slide-index">02 / 11</div>
+    </section>
+
+    <!-- 3. COMPARATIVO GENERAL -->
+    <section class="slide light">
+      <div class="kicker">I. COMPARATIVO GENERAL</div>
+      <h2 class="head" style="margin-bottom:1.6rem;">Tres escenarios, un mismo predio.</h2>
+      <table>
+        <thead><tr><th>Concepto</th><th>Escenario A</th><th>Escenario B</th><th>Escenario C</th></tr></thead>
+        <tbody>
+          <tr><td>Modelo</td><td>Lotes — precio base</td><td>Lotes — precio ajustado</td><td class="col-c">82 casas VIS</td></tr>
+          <tr><td>Ingresos brutos</td><td>$3.331.680.000</td><td>$4.039.200.000</td><td class="col-c">$12.501.461.700</td></tr>
+          <tr><td>Precio / m² (lotes)</td><td>$111.353</td><td>$135.000</td><td class="col-c">No aplica</td></tr>
+          <tr><td>Inversión en construcción</td><td>$0</td><td>$0</td><td class="col-c">$4.351.200.000</td></tr>
+          <tr><td>Margen sobre ingresos</td><td>18,3%</td><td>31,1%</td><td class="col-c">38,6%</td></tr>
+          <tr class="total"><td>Utilidad neta</td><td>$609.837.600</td><td>$1.257.844.000</td><td class="col-c">$4.823.481.307</td></tr>
+          <tr><td>Total propietario</td><td>$671.967.520</td><td>$801.568.800</td><td class="col-c">$1.514.696.261</td></tr>
+          <tr class="highlight"><td>Utilidad desarrollador</td><td>$487.870.080</td><td>$1.006.275.200</td><td>$3.858.785.046</td></tr>
+        </tbody>
+      </table>
+      <div class="slide-index">03 / 11</div>
+    </section>
+
+    <!-- 4. EXHIBIT 1 + 2 — BAR + LINE -->
+    <section class="slide light">
+      <div class="kicker">LECTURA CUANTITATIVA</div>
+      <h2 class="head" style="margin-bottom:1.8rem;">El Escenario C multiplica por 7,9x la utilidad del modelo base.</h2>
+      <div class="grid-2">
+        <div class="exhibit-box">
+          <div class="exhibit-label">Exhibit 1</div>
+          <div class="exhibit-title">Utilidad neta por escenario (COP, millones)</div>
+          <svg viewBox="0 0 470 320" width="100%">
+            <!-- gridlines -->
+            <line class="grid-line" x1="60" y1="280" x2="450" y2="280"/>
+            <line class="grid-line" x1="60" y1="228" x2="450" y2="228"/>
+            <line class="grid-line" x1="60" y1="176" x2="450" y2="176"/>
+            <line class="grid-line" x1="60" y1="124" x2="450" y2="124"/>
+            <line class="grid-line" x1="60" y1="72"  x2="450" y2="72"/>
+            <line class="grid-line" x1="60" y1="20"  x2="450" y2="20"/>
+            <text class="tick-label" x="54" y="283" text-anchor="end">0</text>
+            <text class="tick-label" x="54" y="231" text-anchor="end">1.000</text>
+            <text class="tick-label" x="54" y="179" text-anchor="end">2.000</text>
+            <text class="tick-label" x="54" y="127" text-anchor="end">3.000</text>
+            <text class="tick-label" x="54" y="75"  text-anchor="end">4.000</text>
+            <text class="tick-label" x="54" y="23"  text-anchor="end">5.000</text>
+            <line class="axis-line" x1="60" y1="20" x2="60" y2="280"/>
+            <line class="axis-line" x1="60" y1="280" x2="450" y2="280"/>
+            <!-- bars -->
+            <rect x="70"  y="248.3" width="90" height="31.7" fill="var(--navy-2)"/>
+            <rect x="220" y="214.6" width="90" height="65.4" fill="var(--navy)"/>
+            <rect x="370" y="29.2"  width="90" height="250.8" fill="var(--brass)"/>
+            <text class="bar-value" x="115" y="242" text-anchor="middle">$609,8M</text>
+            <text class="bar-value" x="265" y="208" text-anchor="middle">$1.257,8M</text>
+            <text class="bar-value" x="415" y="23"  text-anchor="middle" font-weight="700">$4.823,5M</text>
+            <text class="cat-label" x="115" y="298" text-anchor="middle">ESCENARIO A</text>
+            <text class="cat-label" x="265" y="298" text-anchor="middle">ESCENARIO B</text>
+            <text class="cat-label" x="415" y="298" text-anchor="middle" font-weight="600">ESCENARIO C</text>
+          </svg>
+          <div class="exhibit-source">Fuente: elaboración propia con base en el modelo financiero del proyecto, junio 2026.</div>
+        </div>
+        <div class="exhibit-box">
+          <div class="exhibit-label">Exhibit 2</div>
+          <div class="exhibit-title">Margen sobre ingresos por escenario (%)</div>
+          <svg viewBox="0 0 470 320" width="100%">
+            <line class="grid-line" x1="60" y1="280" x2="450" y2="280"/>
+            <line class="grid-line" x1="60" y1="215" x2="450" y2="215"/>
+            <line class="grid-line" x1="60" y1="150" x2="450" y2="150"/>
+            <line class="grid-line" x1="60" y1="85"  x2="450" y2="85"/>
+            <line class="grid-line" x1="60" y1="20"  x2="450" y2="20"/>
+            <text class="tick-label" x="54" y="283" text-anchor="end">0%</text>
+            <text class="tick-label" x="54" y="218" text-anchor="end">10%</text>
+            <text class="tick-label" x="54" y="153" text-anchor="end">20%</text>
+            <text class="tick-label" x="54" y="88"  text-anchor="end">30%</text>
+            <text class="tick-label" x="54" y="23"  text-anchor="end">40%</text>
+            <line class="axis-line" x1="60" y1="20" x2="60" y2="280"/>
+            <line class="axis-line" x1="60" y1="280" x2="450" y2="280"/>
+            <polyline points="115,161.1 265,77.9 415,29.1" fill="none" stroke="var(--brass)" stroke-width="2"/>
+            <circle cx="115" cy="161.1" r="4" fill="var(--navy-2)"/>
+            <circle cx="265" cy="77.9"  r="4" fill="var(--navy-2)"/>
+            <circle cx="415" cy="29.1"  r="5" fill="var(--brass)"/>
+            <text class="bar-value" x="115" y="150" text-anchor="middle">18,3%</text>
+            <text class="bar-value" x="265" y="67"  text-anchor="middle">31,1%</text>
+            <text class="bar-value" x="415" y="19"  text-anchor="middle" font-weight="700">38,6%</text>
+            <text class="cat-label" x="115" y="298" text-anchor="middle">ESCENARIO A</text>
+            <text class="cat-label" x="265" y="298" text-anchor="middle">ESCENARIO B</text>
+            <text class="cat-label" x="415" y="298" text-anchor="middle" font-weight="600">ESCENARIO C</text>
+          </svg>
+          <div class="exhibit-source">Fuente: elaboración propia con base en el modelo financiero del proyecto, junio 2026.</div>
+        </div>
+      </div>
+      <div class="slide-index">04 / 11</div>
+    </section>
+
+    <!-- 5. ESCENARIO B FINANCIERO -->
+    <section class="slide light">
+      <div class="badge">ESCENARIO B</div>
+      <h2 class="head" style="margin-bottom:1rem;">Lotes con precio ajustado a valores reales de mercado.</h2>
+      <p class="lede" style="margin-bottom:2rem;">Mismo modelo de comercialización del Escenario A. El precio de venta pasa de $111.353/m² a $135.000/m² (+21,3%), tras verificar que el valor original estaba por debajo de las referencias de mercado para terrenos urbanizados en zonas de expansión residencial de Arjona.</p>
+      <div class="grid-2">
+        <table>
+          <thead><tr><th>Estructura financiera</th><th>Valor (COP)</th></tr></thead>
+          <tbody>
+            <tr><td>Área privada vendible</td><td>29.920 m²</td></tr>
+            <tr><td>Precio de venta por m²</td><td>$135.000</td></tr>
+            <tr class="total"><td>Ingreso bruto total</td><td>$4.039.200.000</td></tr>
+          </tbody>
+        </table>
+        <table>
+          <thead><tr><th>Distribución del beneficio</th><th>Valor (COP)</th></tr></thead>
+          <tbody>
+            <tr><td>Compensación fija por tierra</td><td>$550.000.000</td></tr>
+            <tr><td>Participación en utilidades (20%)</td><td>$251.568.800</td></tr>
+            <tr class="total"><td>Total para el propietario</td><td>$801.568.800</td></tr>
+            <tr class="highlight"><td>Utilidad para el desarrollador</td><td>$1.006.275.200</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-index">05 / 11</div>
+    </section>
+
+    <!-- 6. ESCENARIO B VENTAJAS/RIESGO -->
+    <section class="slide light">
+      <div class="kicker">ESCENARIO B — LECTURA DE RIESGO</div>
+      <div class="grid-2">
+        <div>
+          <h2 class="head" style="font-size:1.4rem; margin-bottom:1.3rem;">Por qué funciona</h2>
+          <ul class="plain">
+            <li>Mismo modelo operativo que el Escenario A — sin inversión adicional ni cambio en el cronograma.</li>
+            <li>Ejecutable en 18–24 meses, igual que el modelo base.</li>
+            <li>El propietario recibe $129.601.280 COP adicionales frente al Escenario A, sin asumir mayor riesgo.</li>
+            <li>El margen sube de 18,3% a 31,1% únicamente ajustando el precio a valores reales de mercado.</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="head" style="font-size:1.4rem; margin-bottom:1.3rem;">Riesgo principal</h2>
+          <div class="risk-flag">
+            <div class="risk-label">RIESGO DE ABSORCIÓN COMERCIAL</div>
+            <p style="line-height:1.6; font-size:0.94rem;">Un precio 21,3% más alto requiere validar que el mercado de Arjona, Turbaco y Cartagena esté dispuesto a pagar $135.000/m² por lote urbanizado sin construcción. Se recomienda validar mediante encuesta de mercado antes de fijar el valor definitivo.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-index">06 / 11</div>
+    </section>
+
+    <!-- 7. ESCENARIO C - UNIDADES -->
+    <section class="slide dark">
+      <div class="badge">ESCENARIO C</div>
+      <h2 class="head" style="margin-bottom:1rem;">82 viviendas VIS en modalidad progresiva.</h2>
+      <p class="lede" style="margin-bottom:2rem; color:rgba(244,241,232,0.68);">Transforma el proyecto de comercialización de lotes a construcción y venta de vivienda de interés social, con primer piso entregado y estructura preparada para ampliación a un segundo nivel.</p>
+      <table class="unit-table">
+        <thead><tr><th>Tipo</th><th>Unidades</th><th>Lote</th><th>Construido</th><th>Precio</th></tr></thead>
+        <tbody>
+          <tr><td>Casa Tipo 1</td><td>56</td><td>200 m²</td><td>48 m² (1er piso)</td><td>$143.574.210</td></tr>
+          <tr><td>Casa Tipo 2</td><td>26</td><td>720 m²</td><td>56 m² (1er piso)</td><td>$171.588.690</td></tr>
+          <tr class="total"><td>Total</td><td>82</td><td>29.920 m²</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:1.6rem; font-size:0.88rem; color:rgba(244,241,232,0.55); max-width:64ch; line-height:1.6;">Ambos precios se ubican por debajo del tope VIS municipal de 135 SMMLV ($236.372.175 COP en 2026), habilitando subsidio del gobierno nacional. El precio del Tipo 1 (82 SMMLV) está calibrado para que el crédito resultante sea pagable por un hogar con ingresos desde ~$2,5 millones mensuales.</p>
+      <div class="slide-index">07 / 11</div>
+    </section>
+
+    <!-- 8. ESCENARIO C - FINANCIERO -->
+    <section class="slide light">
+      <div class="kicker">ESCENARIO C — ESTRUCTURA FINANCIERA</div>
+      <h2 class="head">$12.501M en ingresos brutos, $4.823M en utilidad neta.</h2>
+      <div class="grid-2">
+        <table>
+          <thead><tr><th>Principales costos</th><th>Valor (COP)</th></tr></thead>
+          <tbody>
+            <tr><td>Compensación al propietario</td><td>$550.000.000</td></tr>
+            <tr><td>Urbanismo (2 fases)</td><td>$1.650.600.000</td></tr>
+            <tr><td>Construcción de 82 viviendas</td><td>$4.351.200.000</td></tr>
+            <tr><td>Comisión en ventas (3%)</td><td>$375.043.851</td></tr>
+            <tr><td>Contingencias (2,5%)</td><td>$312.536.543</td></tr>
+            <tr class="total"><td>Total costos</td><td>$7.677.980.393</td></tr>
+          </tbody>
+        </table>
+        <table>
+          <thead><tr><th>Distribución del beneficio</th><th>Valor (COP)</th></tr></thead>
+          <tbody>
+            <tr><td>Compensación fija por tierra</td><td>$550.000.000</td></tr>
+            <tr><td>Participación en utilidades (20%)</td><td>$964.696.261</td></tr>
+            <tr class="total"><td>Total para el propietario</td><td>$1.514.696.261</td></tr>
+            <tr class="highlight"><td>Utilidad para el desarrollador</td><td>$3.858.785.046</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-index">08 / 11</div>
+    </section>
+
+    <!-- 9. EXHIBIT 3 — WATERFALL -->
+    <section class="slide light">
+      <div class="kicker">DEL INGRESO A LA UTILIDAD</div>
+      <div class="exhibit-label">Exhibit 3</div>
+      <div class="exhibit-title" style="font-size:1.3rem; margin-bottom:1.4rem;">Puente de utilidad — Escenario C (COP, millones)</div>
+      <svg viewBox="0 0 900 400" width="100%" style="max-height:52vh;">
+        <line class="grid-line" x1="60" y1="360" x2="860" y2="360"/>
+        <line class="grid-line" x1="60" y1="292" x2="860" y2="292"/>
+        <line class="grid-line" x1="60" y1="224" x2="860" y2="224"/>
+        <line class="grid-line" x1="60" y1="156" x2="860" y2="156"/>
+        <line class="grid-line" x1="60" y1="88"  x2="860" y2="88"/>
+        <line class="grid-line" x1="60" y1="20"  x2="860" y2="20"/>
+        <text class="tick-label" x="54" y="363" text-anchor="end">$0</text>
+        <text class="tick-label" x="54" y="295" text-anchor="end">$2.500M</text>
+        <text class="tick-label" x="54" y="227" text-anchor="end">$5.000M</text>
+        <text class="tick-label" x="54" y="159" text-anchor="end">$7.500M</text>
+        <text class="tick-label" x="54" y="91"  text-anchor="end">$10.000M</text>
+        <text class="tick-label" x="54" y="23"  text-anchor="end">$12.500M</text>
+        <line class="axis-line" x1="60" y1="20" x2="60" y2="360"/>
+        <line class="axis-line" x1="60" y1="360" x2="860" y2="360"/>
+
+        <!-- connector dashed lines -->
+        <line x1="130" y1="20"    x2="160" y2="20"    stroke="var(--ink-soft)" stroke-dasharray="3,3"/>
+        <line x1="230" y1="34.97" x2="260" y2="34.97" stroke="var(--ink-soft)" stroke-dasharray="3,3"/>
+        <line x1="330" y1="79.86" x2="360" y2="79.86" stroke="var(--ink-soft)" stroke-dasharray="3,3"/>
+        <line x1="430" y1="198.18" x2="460" y2="198.18" stroke="var(--ink-soft)" stroke-dasharray="3,3"/>
+        <line x1="530" y1="208.40" x2="560" y2="208.40" stroke="var(--ink-soft)" stroke-dasharray="3,3"/>
+        <line x1="630" y1="220.33" x2="660" y2="220.33" stroke="var(--ink-soft)" stroke-dasharray="3,3"/>
+        <line x1="730" y1="228.81" x2="760" y2="228.81" stroke="var(--ink-soft)" stroke-dasharray="3,3"/>
+
+        <!-- bars: x start=60 step 100 width 70 -->
+        <rect x="60"  y="20"     width="70" height="340"   fill="var(--navy-2)"/>
+        <rect x="160" y="20"     width="70" height="14.97"  fill="var(--red)"/>
+        <rect x="260" y="34.97"  width="70" height="44.89"  fill="var(--red)"/>
+        <rect x="360" y="79.86"  width="70" height="118.32" fill="var(--red)"/>
+        <rect x="460" y="198.18" width="70" height="10.22"  fill="var(--red)"/>
+        <rect x="560" y="208.40" width="70" height="11.93"  fill="var(--red)"/>
+        <rect x="660" y="220.33" width="70" height="8.48"   fill="var(--red)"/>
+        <rect x="760" y="228.81" width="70" height="131.19" fill="var(--brass)"/>
+
+        <!-- value labels -->
+        <text class="bar-value" x="95"  y="14" text-anchor="middle" font-weight="700">$12.501,5M</text>
+        <text class="bar-value" x="195" y="15" text-anchor="middle">-$550,0M</text>
+        <text class="bar-value" x="295" y="30" text-anchor="middle">-$1.650,6M</text>
+        <text class="bar-value" x="395" y="75" text-anchor="middle">-$4.351,2M</text>
+        <text class="bar-value" x="495" y="194" text-anchor="middle">-$375,0M</text>
+        <text class="bar-value" x="595" y="204" text-anchor="middle">-$438,6M</text>
+        <text class="bar-value" x="695" y="216" text-anchor="middle">-$312,5M</text>
+        <text class="bar-value" x="795" y="222" text-anchor="middle" font-weight="700">$4.823,5M</text>
+
+        <!-- category labels -->
+        <text class="cat-label" x="95"  y="378" text-anchor="middle" font-weight="600">Ingreso Bruto</text>
+        <text class="cat-label" x="195" y="378" text-anchor="middle">Tierra</text>
+        <text class="cat-label" x="295" y="378" text-anchor="middle">Urbanismo</text>
+        <text class="cat-label" x="395" y="378" text-anchor="middle">Construcción</text>
+        <text class="cat-label" x="495" y="378" text-anchor="middle">Comisión</text>
+        <text class="cat-label" x="595" y="378" text-anchor="middle">Otros costos</text>
+        <text class="cat-label" x="695" y="378" text-anchor="middle">Contingencias</text>
+        <text class="cat-label" x="795" y="378" text-anchor="middle" font-weight="600">Utilidad Neta</text>
+      </svg>
+      <div class="exhibit-source">Otros costos agrupa licencias, consultoría técnica, publicidad y gastos notariales. Fuente: elaboración propia con base en el modelo financiero del proyecto, junio 2026.</div>
+      <div class="slide-index">09 / 11</div>
+    </section>
+
+    <!-- 10. ESCENARIO C VENTAJAS/RIESGOS -->
+    <section class="slide light">
+      <div class="kicker">ESCENARIO C — LECTURA DE RIESGO</div>
+      <div class="grid-2">
+        <div>
+          <h2 class="head" style="font-size:1.4rem; margin-bottom:1.3rem;">Por qué funciona</h2>
+          <ul class="plain">
+            <li>Utilidad neta 7,9 veces mayor que el Escenario A y 3,8 veces mayor que el Escenario B.</li>
+            <li>El propietario recibe $713.127.461 COP adicionales frente al Escenario B.</li>
+            <li>Producto terminado con acceso real a subsidio VIS, ampliando el mercado objetivo y la velocidad de ventas.</li>
+            <li>La vivienda progresiva permite entrada con precio competitivo, con upside en ampliación futura.</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="head" style="font-size:1.4rem; margin-bottom:1.3rem;">Riesgos y requerimientos</h2>
+          <div class="risk-flag">
+            <div class="risk-label">CAPITAL Y PLAZO</div>
+            <p style="line-height:1.6; font-size:0.93rem; margin-bottom:1.1rem;">Requiere capital de trabajo adicional de $4.351.200.000 COP y un plazo de 30–36 meses, entre 6 y 12 meses más que el modelo de solo lotes.</p>
+          </div>
+          <div class="risk-flag">
+            <div class="risk-label">EJECUCIÓN Y CARTERA</div>
+            <p style="line-height:1.6; font-size:0.93rem;">Exige interventoría de obra sobre 82 unidades y depende de la aprobación efectiva de subsidios de los compradores.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-index">10 / 11</div>
+    </section>
+
+    <!-- 11. CONCLUSION -->
+    <section class="slide dark">
+      <div class="kicker">IV. CONCLUSIÓN Y RECOMENDACIÓN</div>
+      <h2 class="head" style="max-width:22ch;">Una ruta de dos etapas captura lo mejor de ambos escenarios.</h2>
+      <p class="lede" style="color:rgba(244,241,232,0.7); margin-bottom:1.8rem;">El Escenario B es la mejora de menor riesgo: solo exige validar el precio de mercado, sin capital adicional. El Escenario C transforma el retorno del proyecto, a cambio de una estructura de capital para construcción y un plazo mayor.</p>
+      <div class="rule"></div>
+      <div class="grid-2">
+        <div class="stat-block">
+          <div class="num" style="font-size:1.8rem;">Etapa 1</div>
+          <p style="margin-top:0.75rem; font-size:0.93rem; line-height:1.6; color:rgba(244,241,232,0.68);">Lanzar bajo el modelo del Escenario B para generar flujo de caja temprano con las primeras ventas de lotes.</p>
+        </div>
+        <div class="stat-block">
+          <div class="num" style="font-size:1.8rem; color:var(--brass-light);">Etapa 2</div>
+          <p style="margin-top:0.75rem; font-size:0.93rem; line-height:1.6; color:rgba(244,241,232,0.68);">Reinvertir parte de esa utilidad en una fase piloto del Escenario C (20–25 unidades), validando absorción real antes de comprometer el capital total.</p>
+        </div>
+      </div>
+      <div class="rule"></div>
+      <p style="font-size:0.74rem; color:rgba(244,241,232,0.4); max-width:72ch; line-height:1.6;">Las cifras presentadas son estimaciones de referencia con fines de evaluación interna. Los valores definitivos de venta, costos de construcción y condiciones de subsidio están sujetos a validación de mercado y a las condiciones vigentes al momento de la comercialización.</p>
+      <div class="slide-index">11 / 11</div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  const track = document.getElementById('track');
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const dotsWrap = document.getElementById('dots');
+  slides.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(b);
+  });
+  const dotEls = dotsWrap.querySelectorAll('button');
+  const progressLabel = document.getElementById('progressLabel');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+
+  function render(){
+    track.style.transform = `translateX(-${current * 100}vw)`;
+    dotEls.forEach((d,i) => d.classList.toggle('active', i === current));
+    progressLabel.textContent = `${pad(current+1)} / ${pad(total)}`;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === total - 1;
+  }
+
+  function goTo(i){
+    current = Math.max(0, Math.min(total - 1, i));
+    render();
+  }
+
+  btnPrev.addEventListener('click', () => goTo(current - 1));
+  btnNext.addEventListener('click', () => goTo(current + 1));
+
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'PageDown'){ goTo(current + 1); }
+    if(e.key === 'ArrowLeft'  || e.key === 'PageUp'){ goTo(current - 1); }
+  });
+
+  // swipe support
+  let touchStartX = null;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend', (e) => {
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50){ dx < 0 ? goTo(current + 1) : goTo(current - 1); }
+    touchStartX = null;
+  }, {passive:true});
+
+  render();
+
+  // ---------- secuencia de acercamiento tipo satélite (portada) ----------
+  const frames = document.querySelectorAll('.zoom-frame');
+  const mapPin = document.getElementById('mapPin');
+  const coverCopy = document.getElementById('coverCopy');
+  const coords = document.getElementById('coords');
+  let frameIdx = 0;
+
+  function cycleFrames(){
+    frames.forEach(f => f.classList.remove('active'));
+    frames[frameIdx].classList.add('active');
+    frameIdx++;
+    if(frameIdx < frames.length){
+      setTimeout(cycleFrames, 1500);
+    } else {
+      setTimeout(() => {
+        mapPin.classList.add('show');
+        coverCopy.classList.add('show');
+        coords.classList.add('show');
+      }, 900);
+    }
+  }
+  setTimeout(cycleFrames, 300);
+</script>
+
+</body>
+</html>
