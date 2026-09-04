@@ -12,11 +12,11 @@
   Coloca una carpeta "images/" junto a este archivo, con 5 fotografías/capturas
   aéreas o satelitales de la ubicación, ordenadas de la vista más amplia a la
   más cercana, con estos nombres exactos:
-    images/arjona-01.jpg   (vista regional / departamental)
-    images/arjona-02.jpg   (vista municipio de Arjona)
-    images/arjona-03.jpg   (vista del sector / vía de acceso)
-    images/arjona-04.jpg   (vista cercana del predio)
-    images/arjona-05.jpg   (vista más cercana — sobre esta queda el pin)
+    assets/arjona-01.jpg   (vista regional / departamental)
+    assets/arjona-02.jpg   (vista municipio de Arjona)
+    assets/arjona-03.jpg   (vista del sector / vía de acceso)
+    assets/arjona-04.jpg   (vista cercana del predio)
+    assets/arjona-05.jpg   (vista más cercana — sobre esta queda el pin)
   Si los archivos no existen, la portada muestra un degradado de respaldo.
 -->
 <style>
@@ -27,8 +27,8 @@
     --paper-2: #ECE7D8;
     --brass: #A07C3B;
     --brass-light: #C9A36B;
-    --ink: #1D2430;
-    --ink-soft: #4B5563;
+    --ink: #161C26;
+    --ink-soft: #3F4855;
     --green: #3A5A40;
     --red: #93493A;
     --rule: rgba(29,36,48,0.14);
@@ -107,38 +107,44 @@
 
   /* ================= NAV: flechas + dots ================= */
   .navctrl{position:fixed; z-index:80; top:50%; transform:translateY(-50%);}
-  .navctrl.prev{left:22px;} .navctrl.next{right:22px;}
+  .navctrl.prev{left:20px;} .navctrl.next{right:20px;}
   .navctrl button{
-    width:42px; height:42px; border-radius:50%;
-    border:1px solid rgba(160,124,59,0.45);
-    background:rgba(11,30,48,0.35);
-    backdrop-filter:blur(6px);
-    color:var(--brass-light);
-    font-family:'IBM Plex Mono', monospace; font-size:1.1rem;
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid rgba(201,163,107,0.55);
+    background:#0B1E30;
+    box-shadow:0 4px 14px rgba(0,0,0,0.35);
+    color:var(--paper);
+    font-family:'IBM Plex Mono', monospace; font-size:1.15rem;
     cursor:pointer; display:flex; align-items:center; justify-content:center;
-    transition:background .2s ease, transform .2s ease, opacity .2s ease;
+    transition:background .2s ease, transform .2s ease, opacity .2s ease, border-color .2s ease;
   }
-  .navctrl button:hover{background:rgba(160,124,59,0.25); transform:scale(1.06);}
-  .navctrl button:disabled{opacity:0.25; cursor:default;}
+  .navctrl button:hover{background:var(--brass); border-color:var(--brass); transform:scale(1.07);}
+  .navctrl button:disabled{opacity:0.3; cursor:default;}
   @media (max-width:700px){ .navctrl{display:none;} }
 
   #dots{
-    position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
-    display:flex; gap:9px; z-index:80;
-    background:rgba(11,30,48,0.35); backdrop-filter:blur(6px);
-    padding:8px 12px; border-radius:20px;
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    display:flex; gap:10px; z-index:80; align-items:center;
+    background:#0B1E30; box-shadow:0 4px 14px rgba(0,0,0,0.35);
+    padding:9px 14px; border-radius:20px;
   }
   #dots button{
-    width:6px; height:6px; border-radius:50%; border:none;
-    background:rgba(160,124,59,0.4); cursor:pointer; padding:0;
+    width:7px; height:7px; border-radius:50%; border:none;
+    background:rgba(244,241,232,0.35); cursor:pointer; padding:0;
     transition:background .25s ease, transform .25s ease;
   }
-  #dots button.active{background:var(--brass-light); transform:scale(1.5);}
+  #dots button:hover{background:rgba(244,241,232,0.6);}
+  #dots button.active{background:var(--brass-light); transform:scale(1.6);}
 
   .progress-label{
-    position:fixed; top:22px; left:50%; transform:translateX(-50%);
-    font-family:'IBM Plex Mono', monospace; font-size:0.68rem; letter-spacing:0.06em;
-    color:rgba(244,241,232,0.55); z-index:80; pointer-events:none;
+    position:fixed; top:18px; left:50%; transform:translateX(-50%);
+    font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.06em;
+    color:rgba(244,241,232,0.85); z-index:80; pointer-events:none;
+    background:#0B1E30; padding:6px 12px; border-radius:20px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.35);
+  }
+  @media (max-width:700px){
+    .progress-label{top:auto; bottom:66px; font-size:0.62rem; padding:5px 10px;}
   }
 
   /* ================= COVER / ZOOM SATELITAL ================= */
@@ -152,15 +158,15 @@
     transition:opacity 1.15s ease, transform 2.1s ease-out;
   }
   .zoom-frame.active{opacity:1;}
-  .zoom-frame[data-n="1"]{background-image:url('images/arjona-01.jpg');}
+  .zoom-frame[data-n="1"]{background-image:url('assets/arjona-01.jpg');}
   .zoom-frame[data-n="1"].active{transform:scale(1.09);}
-  .zoom-frame[data-n="2"]{background-image:url('images/arjona-02.jpg');}
+  .zoom-frame[data-n="2"]{background-image:url('assets/arjona-02.jpg');}
   .zoom-frame[data-n="2"].active{transform:scale(1.12);}
-  .zoom-frame[data-n="3"]{background-image:url('images/arjona-03.jpg');}
+  .zoom-frame[data-n="3"]{background-image:url('assets/arjona-03.jpg');}
   .zoom-frame[data-n="3"].active{transform:scale(1.14);}
-  .zoom-frame[data-n="4"]{background-image:url('images/arjona-04.jpg');}
+  .zoom-frame[data-n="4"]{background-image:url('assets/arjona-04.jpg');}
   .zoom-frame[data-n="4"].active{transform:scale(1.16);}
-  .zoom-frame[data-n="5"]{background-image:url('images/arjona-05.jpg');}
+  .zoom-frame[data-n="5"]{background-image:url('assets/arjona-05.jpg');}
   .zoom-frame[data-n="5"].active{transform:scale(1.2);}
 
   .zoom-vignette{
@@ -212,16 +218,17 @@
   }
   .cover-copy.show{opacity:1;}
   .cover-top{display:flex; justify-content:space-between; align-items:flex-start;}
-  .brand{font-family:'IBM Plex Mono', monospace; font-size:0.75rem; letter-spacing:0.03em; color:rgba(244,241,232,0.75);}
-  .confid{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.04em; color:rgba(244,241,232,0.5); text-align:right; line-height:1.5;}
-  .cover-mid .eyebrow{font-family:'IBM Plex Mono', monospace; color:var(--brass-light); font-size:0.8rem; margin-bottom:1.1rem;}
-  .cover-bottom{display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid var(--rule-dark); padding-top:1.5rem;}
-  .cover-bottom .stat{font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:rgba(244,241,232,0.7);}
+  .brand{font-family:'IBM Plex Mono', monospace; font-size:0.75rem; letter-spacing:0.03em; color:rgba(244,241,232,0.88); text-shadow:0 1px 6px rgba(0,0,0,0.6);}
+  .confid{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.04em; color:rgba(244,241,232,0.68); text-align:right; line-height:1.5; text-shadow:0 1px 6px rgba(0,0,0,0.6);}
+  .cover-mid .eyebrow{font-family:'IBM Plex Mono', monospace; color:var(--brass-light); font-size:0.8rem; margin-bottom:1.1rem; text-shadow:0 1px 6px rgba(0,0,0,0.6);}
+  h1.hero{text-shadow:0 2px 18px rgba(0,0,0,0.45);}
+  .cover-bottom{display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid rgba(244,241,232,0.28); padding-top:1.5rem; flex-wrap:wrap; gap:1.2rem;}
+  .cover-bottom .stat{font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:rgba(244,241,232,0.82);}
   .cover-bottom .stat b{color:var(--paper); font-weight:500;}
   .coords{
     position:absolute; bottom:5.5vh; left:50%; transform:translateX(-50%);
     font-family:'IBM Plex Mono', monospace; font-size:0.62rem; letter-spacing:0.08em;
-    color:rgba(244,241,232,0.4); opacity:0; transition:opacity 1s ease .6s;
+    color:rgba(244,241,232,0.55); opacity:0; transition:opacity 1s ease .6s;
   }
   .coords.show{opacity:1;}
 
@@ -280,9 +287,33 @@
   .unit-table td, .unit-table th{text-align:right;}
   .unit-table td:first-child, .unit-table th:first-child{text-align:left;}
 
+  .table-scroll{width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width:900px){
+    .navctrl{display:none;}
+    #dots{bottom:16px;}
+  }
   @media (max-width:700px){
-    .slide{padding:8vh 6vw;}
-    .grid-2{gap:1.6rem;}
+    .slide{padding:9vh 6vw 12vh;}
+    h1.hero{font-size:clamp(1.85rem, 8vw, 3rem); max-width:13ch;}
+    h2.head{font-size:clamp(1.45rem, 6.5vw, 2rem); max-width:14ch; margin-bottom:1.4rem;}
+    .lede{font-size:0.98rem;}
+    .grid-2, .grid-3{gap:1.6rem;}
+    .exhibit-box{padding:1.1rem 1rem 0.8rem;}
+    .table-scroll table{min-width:460px;}
+    th, td{font-size:0.82rem; padding:0.65rem 0.5rem;}
+    .cover-top{flex-direction:column; gap:0.6rem;}
+    .confid{text-align:left;}
+    .cover-bottom{flex-direction:column; align-items:flex-start; gap:0.9rem;}
+    .map-pin{left:68%; top:60%;}
+    .pin-label{font-size:0.56rem;}
+    .progress-label{display:none;}
+    .slide-index{bottom:64px;}
+  }
+  @media (max-width:420px){
+    h1.hero{font-size:8.5vw;}
+    .cover-mid .eyebrow{font-size:0.7rem;}
   }
 </style>
 </head>
@@ -293,6 +324,7 @@
 <div class="navctrl prev"><button id="btnPrev" aria-label="Anterior">‹</button></div>
 <div class="navctrl next"><button id="btnNext" aria-label="Siguiente">›</button></div>
 <div id="dots"></div>
+
 
 <div id="deck">
   <div id="track">
@@ -699,6 +731,14 @@
   }, {passive:true});
 
   render();
+
+  // envolver tablas para permitir scroll horizontal en pantallas pequeñas
+  document.querySelectorAll('table').forEach(t => {
+    const wrap = document.createElement('div');
+    wrap.className = 'table-scroll';
+    t.parentNode.insertBefore(wrap, t);
+    wrap.appendChild(t);
+  });
 
   // ---------- secuencia de acercamiento tipo satélite (portada) ----------
   const frames = document.querySelectorAll('.zoom-frame');
