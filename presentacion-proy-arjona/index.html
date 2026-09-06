@@ -123,7 +123,7 @@
   @media (max-width:700px){ .navctrl{display:none;} }
 
   #dots{
-    position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
     display:flex; gap:10px; z-index:80; align-items:center;
     background:#0B1E30; box-shadow:0 4px 14px rgba(0,0,0,0.35);
     padding:9px 14px; border-radius:20px;
@@ -154,10 +154,11 @@
   .zoom-frame{
     position:absolute; inset:0;
     background-size:cover; background-position:center;
-    opacity:0; transform:scale(1);
-    transition:opacity 1.15s ease, transform 2.1s ease-out;
+    opacity:0; transform:scale(1); filter:blur(0px);
+    transition:opacity 1.6s ease, transform 3.2s ease-out, filter .9s ease;
   }
   .zoom-frame.active{opacity:1;}
+  .zoom-stage.transitioning .zoom-frame.active{filter:blur(18px);}
   .zoom-frame[data-n="1"]{background-image:url('assets/arjona-01.jpg');}
   .zoom-frame[data-n="1"].active{transform:scale(1.09);}
   .zoom-frame[data-n="2"]{background-image:url('assets/arjona-02.jpg');}
@@ -171,16 +172,27 @@
 
   .zoom-vignette{
     position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(8,17,29,0.55) 0%, rgba(8,17,29,0.05) 30%, rgba(8,17,29,0.15) 55%, rgba(8,17,29,0.92) 100%);
+    background:linear-gradient(180deg, rgba(4,10,18,0.7) 0%, rgba(4,10,18,0.22) 20%, rgba(4,10,18,0.12) 45%, rgba(4,10,18,0.4) 68%, rgba(4,10,18,0.95) 100%);
     pointer-events:none;
   }
+  .zoom-mask{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(6,15,26,0.42) 0%, rgba(6,15,26,0.3) 100%);
+    backdrop-filter:saturate(72%) brightness(0.92);
+    -webkit-backdrop-filter:saturate(72%) brightness(0.92);
+    opacity:1;
+    transition:opacity 2s ease;
+    pointer-events:none;
+  }
+  .zoom-mask.clear{opacity:0;}
   .scanlines{
     position:absolute; inset:0; pointer-events:none; opacity:0.5;
     background-image:repeating-linear-gradient(0deg, rgba(244,241,232,0.02) 0px, rgba(244,241,232,0.02) 1px, transparent 1px, transparent 3px);
   }
 
   .map-pin{
-    position:absolute; left:54%; top:47%;
+    position:absolute; left:49%; top:47%;
+    display:flex; flex-direction:column; align-items:center;
     opacity:0; transform:translate(-50%,-140%);
     transition:opacity .5s ease, transform .6s cubic-bezier(.34,1.56,.64,1);
     z-index:5;
@@ -191,6 +203,7 @@
     background:var(--brass-light);
     box-shadow:0 0 0 3px rgba(244,241,232,0.9), 0 2px 10px rgba(0,0,0,0.5);
     position:relative;
+    flex-shrink:0;
   }
   .pin-dot::after{
     content:""; position:absolute; inset:-16px; border-radius:50%;
@@ -203,34 +216,50 @@
   }
   .pin-stem{
     width:1.5px; height:22px; background:var(--brass-light);
-    margin:0 auto; opacity:0.9;
+    opacity:0.9;
   }
   .pin-label{
     font-family:'IBM Plex Mono', monospace; font-size:0.62rem; letter-spacing:0.04em;
-    color:var(--paper); background:rgba(11,30,48,0.75); border:1px solid rgba(201,163,107,0.5);
-    padding:3px 7px; white-space:nowrap; position:absolute; top:-30px; left:50%; transform:translateX(-50%);
+    color:var(--paper); background:rgba(11,30,48,0.8); border:1px solid rgba(201,163,107,0.5);
+    padding:4px 8px; white-space:nowrap; margin-bottom:9px;
+    text-align:center; line-height:1.5;
   }
+  .pin-coords{display:block; font-size:0.56rem; color:rgba(244,241,232,0.6); letter-spacing:0.03em;}
 
   .cover-copy{
     position:absolute; inset:0; z-index:6;
     display:flex; flex-direction:column; justify-content:space-between;
-    padding:6vh 9vw; opacity:0; transition:opacity 1s ease .3s;
+    padding-top:5vh; padding-left:9vw; padding-right:9vw;
+    padding-bottom:calc(5vh + 74px);
+    opacity:0; transition:opacity 1s ease .3s;
   }
   .cover-copy.show{opacity:1;}
   .cover-top{display:flex; justify-content:space-between; align-items:flex-start;}
-  .brand{font-family:'IBM Plex Mono', monospace; font-size:0.75rem; letter-spacing:0.03em; color:rgba(244,241,232,0.88); text-shadow:0 1px 6px rgba(0,0,0,0.6);}
-  .confid{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.04em; color:rgba(244,241,232,0.68); text-align:right; line-height:1.5; text-shadow:0 1px 6px rgba(0,0,0,0.6);}
-  .cover-mid .eyebrow{font-family:'IBM Plex Mono', monospace; color:var(--brass-light); font-size:0.8rem; margin-bottom:1.1rem; text-shadow:0 1px 6px rgba(0,0,0,0.6);}
-  h1.hero{text-shadow:0 2px 18px rgba(0,0,0,0.45);}
-  .cover-bottom{display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid rgba(244,241,232,0.28); padding-top:1.5rem; flex-wrap:wrap; gap:1.2rem;}
-  .cover-bottom .stat{font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:rgba(244,241,232,0.82);}
-  .cover-bottom .stat b{color:var(--paper); font-weight:500;}
-  .coords{
-    position:absolute; bottom:5.5vh; left:50%; transform:translateX(-50%);
-    font-family:'IBM Plex Mono', monospace; font-size:0.62rem; letter-spacing:0.08em;
-    color:rgba(244,241,232,0.55); opacity:0; transition:opacity 1s ease .6s;
+  .brand, .confid{
+    background:rgba(6,15,26,0.55);
+    padding:6px 10px;
+    border-radius:2px;
   }
-  .coords.show{opacity:1;}
+  .brand{font-family:'IBM Plex Mono', monospace; font-size:0.75rem; letter-spacing:0.03em; color:rgba(244,241,232,0.92);}
+  .confid{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.04em; color:rgba(244,241,232,0.75); text-align:right; line-height:1.6;}
+  .cover-mid .eyebrow{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace; color:var(--brass-light); font-size:0.8rem; margin-bottom:1.1rem;
+    background:rgba(6,15,26,0.55); padding:5px 10px; border-radius:2px;
+  }
+  h1.hero{text-shadow:0 2px 22px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.5);}
+  .cover-bottom{
+    display:grid; grid-template-columns:1fr auto 1fr; align-items:flex-end; gap:1.2rem;
+    border-top:1px solid rgba(244,241,232,0.28); padding-top:1.5rem;
+  }
+  .cover-bottom .stat{font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:rgba(244,241,232,0.85); text-shadow:0 1px 8px rgba(0,0,0,0.7);}
+  .cover-bottom .stat b{color:var(--paper); font-weight:500;}
+  .cover-bottom .stat.center{text-align:center; justify-self:center;}
+  .cover-bottom .stat.right{text-align:right; justify-self:end;}
+  .coords-inline{
+    font-size:0.64rem; letter-spacing:0.05em; color:rgba(244,241,232,0.55);
+    margin-top:0.3rem; font-weight:400;
+  }
 
   /* ================= TABLAS ================= */
   table{width:100%; border-collapse:collapse;}
@@ -305,7 +334,8 @@
     th, td{font-size:0.82rem; padding:0.65rem 0.5rem;}
     .cover-top{flex-direction:column; gap:0.6rem;}
     .confid{text-align:left;}
-    .cover-bottom{flex-direction:column; align-items:flex-start; gap:0.9rem;}
+    .cover-bottom{grid-template-columns:1fr; justify-items:start; gap:0.9rem;}
+    .cover-bottom .stat.center, .cover-bottom .stat.right{justify-self:start; text-align:left;}
     .map-pin{left:68%; top:60%;}
     .pin-label{font-size:0.56rem;}
     .progress-label{display:none;}
@@ -331,16 +361,17 @@
 
     <!-- 1. COVER — ZOOM SATELITAL + PIN -->
     <section class="slide dark cover-slide">
-      <div class="zoom-stage">
+      <div class="zoom-stage" id="zoomStage">
         <div class="zoom-frame" data-n="1"></div>
         <div class="zoom-frame" data-n="2"></div>
         <div class="zoom-frame" data-n="3"></div>
         <div class="zoom-frame" data-n="4"></div>
         <div class="zoom-frame" data-n="5"></div>
+        <div class="zoom-mask" id="zoomMask"></div>
         <div class="scanlines"></div>
         <div class="zoom-vignette"></div>
         <div class="map-pin" id="mapPin">
-          <div class="pin-label">ARJONA · BOLÍVAR</div>
+          <div class="pin-label">ARJONA · BOLÍVAR<span class="pin-coords">10.2547° N, 75.3453° O</span></div>
           <div class="pin-dot"></div>
           <div class="pin-stem"></div>
         </div>
@@ -356,11 +387,10 @@
         </div>
         <div class="cover-bottom">
           <div class="stat">ÁREA DEL PREDIO<br><b>55.000 m²</b></div>
-          <div class="stat">UBICACIÓN<br><b>Arjona, Bolívar</b></div>
-          <div class="stat">UTILIDAD NETA — MEJOR ESCENARIO<br><b>$4.823.481.307 COP</b></div>
+          <div class="stat center">UBICACIÓN<br><b>Arjona, Bolívar</b></div>
+          <div class="stat right">UTILIDAD NETA — MEJOR ESCENARIO<br><b>$4.823.481.307 COP</b></div>
         </div>
       </div>
-      <div class="coords mono" id="coords">10.2547° N, 75.3453° O — ARJONA, BOLÍVAR, COLOMBIA</div>
     </section>
 
     <!-- 2. OPORTUNIDAD -->
@@ -742,26 +772,44 @@
 
   // ---------- secuencia de acercamiento tipo satélite (portada) ----------
   const frames = document.querySelectorAll('.zoom-frame');
+  const zoomStage = document.getElementById('zoomStage');
+  const zoomMask = document.getElementById('zoomMask');
   const mapPin = document.getElementById('mapPin');
   const coverCopy = document.getElementById('coverCopy');
-  const coords = document.getElementById('coords');
   let frameIdx = 0;
 
-  function cycleFrames(){
-    frames.forEach(f => f.classList.remove('active'));
-    frames[frameIdx].classList.add('active');
-    frameIdx++;
-    if(frameIdx < frames.length){
-      setTimeout(cycleFrames, 1500);
-    } else {
-      setTimeout(() => {
-        mapPin.classList.add('show');
-        coverCopy.classList.add('show');
-        coords.classList.add('show');
-      }, 900);
-    }
+  function revealCover(){
+    mapPin.classList.add('show');
+    coverCopy.classList.add('show');
   }
-  setTimeout(cycleFrames, 300);
+
+  function advanceFrame(){
+    const nextIdx = frameIdx + 1;
+    if(nextIdx >= frames.length){
+      setTimeout(revealCover, 800);
+      return;
+    }
+    // 1) el frame actual entra en velo de desenfoque (oculta el punto de corte)
+    zoomStage.classList.add('transitioning');
+    setTimeout(() => {
+      // 2) el siguiente frame se superpone mientras ambos siguen desenfocados
+      frames[nextIdx].classList.add('active');
+      // la máscara se aclara únicamente al llegar a la última imagen (efecto "revelación")
+      if(nextIdx === frames.length - 1){ zoomMask.classList.add('clear'); }
+      setTimeout(() => {
+        // 3) se retira el desenfoque, el nuevo frame queda nítido y sigue haciendo zoom
+        zoomStage.classList.remove('transitioning');
+        frames[frameIdx].classList.remove('active');
+        frameIdx = nextIdx;
+        setTimeout(advanceFrame, 1450);
+      }, 950);
+    }, 300);
+  }
+
+  setTimeout(() => {
+    frames[0].classList.add('active');
+    setTimeout(advanceFrame, 1450);
+  }, 250);
 </script>
 
 </body>
