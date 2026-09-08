@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro Regional de Formalización, Seguridad Minera y Emergencias — Ubaté</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!--
+  IMÁGENES REQUERIDAS — carpeta "assets/" junto a este archivo:
+    assets/cover.jpg   (foto de capacitación agropecuaria / aula rural — portada)
+-->
+<style>
+  :root{
+    --navy: #0B1E30; --navy-2: #122942; --paper: #F4F1E8; --paper-2: #ECE7D8;
+    --brass: #A07C3B; --brass-light: #C9A36B; --ink: #161C26; --ink-soft: #3F4855;
+    --green: #3A5A40; --red: #93493A; --rule: rgba(29,36,48,0.14); --rule-dark: rgba(244,241,232,0.16);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html, body{height:100%; overflow:hidden;}
+  body{font-family:'IBM Plex Sans', sans-serif; color:var(--ink); background:var(--navy); -webkit-font-smoothing:antialiased;}
+  #deck{position:relative; width:100vw; height:100vh; overflow:hidden;}
+  #track{display:flex; height:100vh; width:100%; transition:transform .75s cubic-bezier(.65,0,.35,1);}
+  .slide{flex:0 0 100vw; height:100vh; overflow-y:auto; padding:6.5vh 9vw; display:flex; flex-direction:column; justify-content:flex-start; position:relative;}
+  .slide > *:first-child{margin-top:auto;}
+  .slide > *:last-child{margin-bottom:auto;}
+  .slide::-webkit-scrollbar{display:none;}
+  .dark{background:var(--navy); color:var(--paper);}
+  .dark .ink-soft{color:rgba(244,241,232,0.62);}
+  .light{background:var(--paper);}
+  .light .ink-soft{color:var(--ink-soft);}
+  .kicker{font-family:'IBM Plex Mono', monospace; font-size:0.72rem; letter-spacing:0.02em; color:var(--brass); display:flex; align-items:center; gap:0.6rem; margin-bottom:1.6rem;}
+  .kicker::before{content:""; width:22px; height:1px; background:var(--brass); display:inline-block;}
+  .dark .kicker{color:var(--brass-light);}
+  .dark .kicker::before{background:var(--brass-light);}
+  h1.hero{font-family:'Newsreader', serif; font-weight:500; font-size:clamp(2.2rem, 4.6vw, 3.7rem); line-height:1.08; max-width:17ch;}
+  h2.head{font-family:'Newsreader', serif; font-weight:500; font-size:clamp(1.6rem, 2.8vw, 2.3rem); line-height:1.16; max-width:20ch; margin-bottom:1.8rem;}
+  .lede{font-family:'Newsreader', serif; font-style:italic; font-size:1.06rem; line-height:1.6; max-width:56ch; color:var(--ink-soft);}
+  .dark .lede{color:rgba(244,241,232,0.68);}
+  .rule{height:1px; background:var(--rule); width:100%; margin:1.7rem 0;}
+  .dark .rule{background:var(--rule-dark);}
+  .navctrl{position:fixed; z-index:80; top:50%; transform:translateY(-50%);}
+  .navctrl.prev{left:20px;} .navctrl.next{right:20px;}
+  .navctrl button{width:44px; height:44px; border-radius:50%; border:1px solid rgba(201,163,107,0.55); background:#0B1E30; box-shadow:0 4px 14px rgba(0,0,0,0.35); color:var(--paper); font-family:'IBM Plex Mono', monospace; font-size:1.15rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .2s ease, transform .2s ease, opacity .2s ease, border-color .2s ease;}
+  .navctrl button:hover{background:var(--brass); border-color:var(--brass); transform:scale(1.07);}
+  .navctrl button:disabled{opacity:0.3; cursor:default;}
+  @media (max-width:900px){ .navctrl{display:none;} }
+  #dots{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:9px; z-index:80; align-items:center; background:#0B1E30; box-shadow:0 4px 14px rgba(0,0,0,0.35); padding:9px 13px; border-radius:20px;}
+  #dots button{width:6px; height:6px; border-radius:50%; border:none; background:rgba(244,241,232,0.35); cursor:pointer; padding:0; transition:background .25s ease, transform .25s ease;}
+  #dots button:hover{background:rgba(244,241,232,0.6);}
+  #dots button.active{background:var(--brass-light); transform:scale(1.6);}
+  .progress-label{position:fixed; top:18px; left:50%; transform:translateX(-50%); font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.06em; color:rgba(244,241,232,0.85); z-index:80; pointer-events:none; background:#0B1E30; padding:6px 12px; border-radius:20px; box-shadow:0 4px 14px rgba(0,0,0,0.35);}
+  .photo-slide{padding:0;}
+  .photo-stage{position:absolute; inset:0; overflow:hidden; background:radial-gradient(ellipse at 30% 20%, #16324d 0%, #0B1E30 55%, #081522 100%);}
+  .photo-stage img{width:100%; height:100%; object-fit:cover; display:block;}
+  .photo-vignette{position:absolute; inset:0; background:linear-gradient(180deg, rgba(4,10,18,0.65) 0%, rgba(4,10,18,0.2) 30%, rgba(4,10,18,0.15) 55%, rgba(4,10,18,0.9) 100%); pointer-events:none;}
+  .photo-copy{position:absolute; inset:0; z-index:6; display:flex; flex-direction:column; justify-content:space-between; padding-top:5vh; padding-left:9vw; padding-right:9vw; padding-bottom:calc(5vh + 74px);}
+  .photo-top{display:flex; justify-content:space-between; align-items:flex-start;}
+  .brand, .confid{background:rgba(6,15,26,0.55); padding:6px 10px; border-radius:2px;}
+  .brand{font-family:'IBM Plex Mono', monospace; font-size:0.75rem; letter-spacing:0.03em; color:rgba(244,241,232,0.92);}
+  .confid{font-family:'IBM Plex Mono', monospace; font-size:0.64rem; letter-spacing:0.04em; color:rgba(244,241,232,0.75); text-align:right; line-height:1.6;}
+  .photo-copy .eyebrow{display:inline-block; font-family:'IBM Plex Mono', monospace; color:var(--brass-light); font-size:0.78rem; margin-bottom:1.1rem; background:rgba(6,15,26,0.55); padding:5px 10px; border-radius:2px;}
+  .photo-copy h1.hero{text-shadow:0 2px 22px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.5); color:var(--paper);}
+  .photo-bottom{display:grid; grid-template-columns:1fr auto 1fr; align-items:flex-end; gap:1.2rem; border-top:1px solid rgba(244,241,232,0.28); padding-top:1.4rem;}
+  .photo-bottom .stat{font-family:'IBM Plex Mono', monospace; font-size:0.74rem; color:rgba(244,241,232,0.85); text-shadow:0 1px 8px rgba(0,0,0,0.7);}
+  .photo-bottom .stat b{color:var(--paper); font-weight:500;}
+  .photo-bottom .stat.center{text-align:center; justify-self:center;}
+  .photo-bottom .stat.right{text-align:right; justify-self:end;}
+  table{width:100%; border-collapse:collapse;}
+  th, td{padding:0.75rem 0.6rem; text-align:right; font-size:0.9rem; border-bottom:1px solid var(--rule);}
+  th:first-child, td:first-child{text-align:left;}
+  th{font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:0.68rem; letter-spacing:0.02em; color:var(--ink-soft); padding-bottom:0.8rem;}
+  td{font-family:'IBM Plex Mono', monospace; font-size:0.88rem;}
+  td:first-child{font-family:'IBM Plex Sans', sans-serif; font-size:0.9rem;}
+  tr.total td{border-top:1px solid var(--ink); border-bottom:none; font-weight:600; padding-top:0.9rem;}
+  tr.highlight td{color:var(--green); font-weight:600;}
+  .col-brass{color:var(--brass); font-weight:600;}
+  .table-scroll{width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  .exhibit-label{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.05em; color:var(--brass); text-transform:uppercase; margin-bottom:0.3rem;}
+  .exhibit-title{font-family:'Newsreader', serif; font-size:1.1rem; font-weight:500; margin-bottom:0.9rem;}
+  .exhibit-source{font-family:'IBM Plex Mono', monospace; font-size:0.62rem; color:var(--ink-soft); margin-top:0.55rem; font-style:italic;}
+  .exhibit-box{border:1px solid var(--rule); padding:1.3rem 1.3rem 0.9rem;}
+  svg text{font-family:'IBM Plex Mono', monospace;}
+  .axis-line{stroke:var(--ink); stroke-width:1;}
+  .grid-line{stroke:var(--rule); stroke-width:1;}
+  .tick-label{fill:var(--ink-soft); font-size:9px;}
+  .bar-value{fill:var(--ink); font-size:10px; font-weight:600;}
+  .cat-label{fill:var(--ink-soft); font-size:9px;}
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:2.4rem;}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:2rem;}
+  @media (max-width:820px){ .grid-2, .grid-3{grid-template-columns:1fr; gap:1.6rem;} }
+  .stat-block .num{font-family:'Newsreader', serif; font-size:2.2rem; font-weight:500; line-height:1;}
+  .stat-block .label{font-family:'IBM Plex Mono', monospace; font-size:0.7rem; color:var(--ink-soft); margin-top:0.5rem;}
+  .dark .stat-block .label{color:rgba(244,241,232,0.6);}
+  ul.plain{list-style:none;}
+  ul.plain li{position:relative; padding-left:1.3rem; margin-bottom:0.75rem; line-height:1.5; font-size:0.94rem;}
+  ul.plain li::before{content:"—"; position:absolute; left:0; color:var(--brass);}
+  .dark ul.plain li::before{color:var(--brass-light);}
+  .badge{display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.03em; padding:0.3rem 0.6rem; border:1px solid var(--brass); color:var(--brass); margin-bottom:1rem;}
+  .legal-box{border-left:2px solid var(--brass); padding-left:1rem; margin-top:1.2rem; background:rgba(160,124,59,0.06);}
+  .legal-box .legal-label{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; color:var(--brass); letter-spacing:0.03em; margin-bottom:0.35rem;}
+  .ask-box{border:1px solid var(--brass); padding:1.2rem 1.3rem; margin-top:1.4rem;}
+  .ask-box .ask-label{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; color:var(--brass); letter-spacing:0.05em; margin-bottom:0.5rem;}
+  .dark .ask-box{border-color:var(--brass-light);}
+  .dark .ask-box .ask-label{color:var(--brass-light);}
+  .step-flow{display:flex; flex-direction:column; gap:0; margin-top:1rem;}
+  .step-row{display:grid; grid-template-columns:34px 1fr; gap:1rem; padding:0.9rem 0;}
+  .step-num{font-family:'Newsreader', serif; font-size:1.3rem; color:var(--brass); font-weight:500;}
+  .step-row:not(:last-child){border-bottom:1px dashed var(--rule);}
+  .step-title{font-weight:600; font-size:0.95rem; margin-bottom:0.2rem;}
+  .step-desc{font-size:0.88rem; color:var(--ink-soft); line-height:1.5;}
+  @media (max-width:700px){
+    .slide{padding:9vh 6vw 12vh;}
+    h1.hero{font-size:clamp(1.75rem, 7.5vw, 2.5rem); max-width:14ch;}
+    h2.head{font-size:clamp(1.3rem, 6vw, 1.7rem); max-width:16ch; margin-bottom:1.3rem;}
+    .lede{font-size:0.94rem;}
+    .grid-2, .grid-3{gap:1.5rem;}
+    .table-scroll table{min-width:440px;}
+    th, td{font-size:0.8rem; padding:0.6rem 0.45rem;}
+    .photo-top{flex-direction:column; gap:0.6rem;}
+    .confid{text-align:left;}
+    .photo-bottom{grid-template-columns:1fr; justify-items:start; gap:0.8rem;}
+    .photo-bottom .stat.center, .photo-bottom .stat.right{justify-self:start; text-align:left;}
+    .progress-label{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-label" id="progressLabel">01 / 08</div>
+<div class="navctrl prev"><button id="btnPrev" aria-label="Anterior">‹</button></div>
+<div class="navctrl next"><button id="btnNext" aria-label="Siguiente">›</button></div>
+<div id="dots"></div>
+
+<div id="deck"><div id="track">
+
+  <!-- 1. PORTADA -->
+  <section class="slide dark photo-slide">
+    <div class="photo-stage"><img src="assets/cover.jpg" alt="" onerror="this.style.display='none'"><div class="photo-vignette"></div></div>
+    <div class="photo-copy">
+      <div class="photo-top">
+        <div class="brand">PROVINCIA DE UBATÉ · CUNDINAMARCA</div>
+        <div class="confid">PARA: AGENCIA NACIONAL DE MINERÍA<br>MINISTERIO DE MINAS · MINISTERIO DE TRABAJO</div>
+      </div>
+      <div>
+        <div class="eyebrow">Propuesta de Infraestructura de Seguridad Minera — Septiembre 2026</div>
+        <h1 class="hero">Centro Regional de Formalización, Seguridad Minera y Emergencias</h1>
+      </div>
+      <div class="photo-bottom">
+        <div class="stat">USO DE SUELO<br><b>Institucional (compatible)</b></div>
+        <div class="stat center">VEHÍCULO<br><b>Fiducia mercantil / convenio ANM</b></div>
+        <div class="stat right">IMPACTO<br><b>~20 muertes en 2026, solo Sutatausa</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. EL PROBLEMA -->
+  <section class="slide light">
+    <div class="kicker">EL PROBLEMA</div>
+    <h2 class="head">Un solo municipio, Sutatausa, acumula cerca de 20 muertes mineras en lo corrido de 2026.</h2>
+    <div class="exhibit-box">
+      <div class="exhibit-label">Exhibit 1</div>
+      <div class="exhibit-title">Muertes acumuladas por accidente minero, 2011–2021 (municipios de la provincia)</div>
+      <svg viewBox="0 0 470 260" width="100%">
+        <line class="grid-line" x1="60" y1="220" x2="450" y2="220"/>
+        <line class="grid-line" x1="60" y1="165" x2="450" y2="165"/>
+        <line class="grid-line" x1="60" y1="110" x2="450" y2="110"/>
+        <line class="grid-line" x1="60" y1="55"  x2="450" y2="55"/>
+        <text class="tick-label" x="54" y="223" text-anchor="end">0</text>
+        <text class="tick-label" x="54" y="168" text-anchor="end">20</text>
+        <text class="tick-label" x="54" y="113" text-anchor="end">40</text>
+        <text class="tick-label" x="54" y="58"  text-anchor="end">60</text>
+        <line class="axis-line" x1="60" y1="20" x2="60" y2="220"/>
+        <line class="axis-line" x1="60" y1="220" x2="450" y2="220"/>
+        <rect x="90"  y="52.6" width="70" height="167.4" fill="var(--red)"/>
+        <rect x="220" y="70.3" width="70" height="149.7" fill="var(--red)"/>
+        <rect x="350" y="115.5" width="70" height="104.5" fill="var(--red)"/>
+        <text class="bar-value" x="125" y="47" text-anchor="middle" font-weight="700">61</text>
+        <text class="bar-value" x="255" y="65" text-anchor="middle">55</text>
+        <text class="bar-value" x="385" y="110" text-anchor="middle">38</text>
+        <text class="cat-label" x="125" y="238" text-anchor="middle" font-weight="600">CUCUNUBÁ</text>
+        <text class="cat-label" x="255" y="238" text-anchor="middle">LENGUAZAQUE</text>
+        <text class="cat-label" x="385" y="238" text-anchor="middle">GUACHETÁ</text>
+      </svg>
+      <div class="exhibit-source">Fuente: Prevención Integral / ORP Conference, sobre accidentalidad minera nacional 2011–2021. El carbón es el mineral con más accidentes en Colombia (720 de 1.306 muertes mineras en la década).</div>
+    </div>
+    <div class="legal-box" style="margin-top:1.4rem; border-left-color:var(--red);">
+      <div class="legal-label" style="color:var(--red);">LO QUE ESTÁ PASANDO AHORA, NO HACE UNA DÉCADA</div>
+      <p style="font-size:0.92rem; line-height:1.6;">La serie histórica de arriba (2011-2021) ya ubicaba a esta provincia entre las más letales del país. Lo que está ocurriendo en 2026 es más grave y más concentrado: solo en Sutatausa, un único municipio, se reportan cerca de <b>20 muertes en lo corrido del año</b> — explosiones en mayo y acumulados posteriores. La emergencia no es histórica: es activa, y está en un solo punto del mapa.</p>
+    </div>
+    <div class="grid-3" style="margin-top:1.4rem;">
+      <div class="stat-block"><div class="num" style="color:var(--red)">~20</div><div class="label">MUERTES EN 2026, SOLO EN SUTATAUSA</div></div>
+      <div class="stat-block"><div class="num">49%</div><div class="label">MUERTES LIGADAS A INFORMALIDAD, SEGÚN LA ANM</div></div>
+      <div class="stat-block"><div class="num">16 de ~100</div><div class="label">BOCAMINAS CON TÍTULO FORMAL EN SUTATAUSA</div></div>
+    </div>
+  </section>
+
+  <!-- 2B. NO ES UN PROYECTO DE INVERSIÓN TÍPICO -->
+  <section class="slide dark">
+    <div class="kicker">CÓMO LEER ESTA PROPUESTA</div>
+    <h2 class="head">No se pide financiar una respuesta a emergencias — se pide ocupar el vacío antes de la próxima explosión.</h2>
+    <div class="grid-2">
+      <div>
+        <div class="legal-label" style="color:rgba(244,241,232,0.5); font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.03em; margin-bottom:0.6rem;">CÓMO SE VE UN PROYECTO DE SEGURIDAD TÍPICO</div>
+        <ul class="plain">
+          <li>Presupuesto de inversión en equipos y personal, sujeto a la vigencia fiscal del año.</li>
+          <li>Indicador de "vidas salvadas" proyectado, difícil de defender ante cualquier oficina de presupuesto.</li>
+          <li>Reacciona después de cada tragedia, en vez de anticiparla.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="legal-label" style="color:var(--brass-light); font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.03em; margin-bottom:0.6rem;">CÓMO SE PLANTEA ESTE PREDIO</div>
+        <ul class="plain">
+          <li>Ubaté ya funciona como referencia hospitalaria de facto de la provincia — este centro formaliza un rol que la ciudad ya cumple.</li>
+          <li>El Ministerio de Minas ya está reactivando la inversión en la zona: ocupar el vacío ahora, antes de que la reactivación atraiga más informalidad sin más supervisión.</li>
+          <li>No requiere partida presupuestal nueva: se estructura en fiducia o convenio, no como gasto discrecional nuevo.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ask-box">
+      <div class="ask-label">EL PUNTO CENTRAL</div>
+      <p style="font-size:0.94rem; line-height:1.7;">El Estado no tiene hoy ninguna presencia física de formalización o seguridad en el punto exacto donde ocurren las explosiones. Cada tragedia se atiende de forma improvisada, municipio por municipio. Este centro no es un gasto de seguridad — es ocupar, antes que nadie más, el único punto de la provincia que hoy está vacío de Estado.</p>
+    </div>
+  </section>
+
+  <!-- 3. ALINEACIÓN CON POLÍTICA VIGENTE -->
+  <section class="slide light">
+    <div class="kicker">ALINEACIÓN CON LA POLÍTICA VIGENTE</div>
+    <h2 class="head" style="margin-bottom:1.4rem;">El propio Ministerio de Minas ya está reactivando el sector — este centro evita que la reactivación repita la informalidad.</h2>
+    <div class="legal-box">
+      <div class="legal-label">CONTEXTO REGULATORIO — SEPTIEMBRE 2026</div>
+      <p style="font-size:0.92rem; line-height:1.6;">El 3 de septiembre de 2026, MinMinas derogó los "Distritos Mineros Especiales" para reactivar la inversión y exploración, priorizando en su lugar acuerdos de formalización puntuales — el mismo modelo usado en Marmato (321 mineros tradicionales) y Segovia (450 mineros del Proyecto Matuna).</p>
+    </div>
+    <p class="lede" style="margin-top:1.6rem;">Este centro es exactamente ese modelo, aplicado a la provincia con más muertes carboneras del país — acompaña la reactivación minera sin dejar un vacío de seguridad y formalización en el terreno.</p>
+  </section>
+
+  <!-- 4. LA SOLUCIÓN -->
+  <section class="slide light">
+    <div class="kicker">LA SOLUCIÓN</div>
+    <h2 class="head" style="margin-bottom:1.4rem;">Ubaté ya funciona como el punto de referencia de emergencia de la provincia — démosle infraestructura real.</h2>
+    <div class="grid-2">
+      <div>
+        <ul class="plain">
+          <li>Oficina regional de formalización minera (títulos, contratos de formalización con la ANM).</li>
+          <li>Centro de entrenamiento en seguridad: detección de gas metano, ventilación, rescate en socavón.</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="plain">
+          <li>Punto de acopio de equipos y coordinación de emergencia.</li>
+          <li>Hoy los heridos ya llegan al Hospital Regional de Ubaté, sin infraestructura formal de respaldo — este centro formaliza ese rol.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. MARCO LEGAL DEL PREDIO -->
+  <section class="slide light">
+    <div class="kicker">MARCO LEGAL DEL PREDIO</div>
+    <h2 class="head" style="margin-bottom:1.4rem;">Uso institucional ya compatible bajo la norma urbanística vigente.</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Instrumento</th><th>Disposición relevante</th></tr></thead>
+        <tbody>
+          <tr><td>Decreto 012 de 2006 (Plan Parcial vigente)</td><td>Predio zonificado como Área de Actividad Múltiple (U-M)</td></tr>
+          <tr class="highlight"><td>Artículo 41 — Asignación de usos</td><td>Institucional clase I y II: uso <b>compatible</b>, sin trámite de cambio de norma</td></tr>
+          <tr><td>Artículo 67</td><td>Fiducia mercantil ya contemplada como instrumento de asociación Estado–privados</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6. MECANISMO INSTITUCIONAL -->
+  <section class="slide dark">
+    <div class="kicker">MECANISMO INSTITUCIONAL</div>
+    <h2 class="head">Dos rutas posibles, ambas ya disponibles en el marco legal vigente.</h2>
+    <div class="step-flow">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Convenio ANM / Ministerio de Trabajo — Fiducia mercantil</div><div class="step-desc">El propietario aporta el predio a una fiducia; la ANM y el Ministerio de Trabajo cofinancian la infraestructura de formalización y seguridad, alineados con su agenda de reactivación 2026.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div><div class="step-title">Alternativa — ANIM como gerente inmobiliario</div><div class="step-desc">Si el proyecto se estructura como infraestructura social de atención ciudadana (oficina pública + centro de emergencias), la ANM o el Ministerio de Minas pueden delegar la compra y gerencia del predio a la Agencia Nacional Inmobiliaria Virgilio Barco, bajo el mismo modelo que usa para el SENA (Decreto 2556 de 2015).</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. LA SOLICITUD -->
+  <section class="slide light">
+    <div class="kicker">LA SOLICITUD</div>
+    <h2 class="head">Un convenio ANM–Ministerio de Trabajo–Gobernación para instalar el centro.</h2>
+    <div class="ask-box">
+      <div class="ask-label">LO QUE SE PIDE</div>
+      <p style="font-size:0.96rem; line-height:1.7;">Que la Agencia Nacional de Minería, el Ministerio de Minas y Energía y el Ministerio de Trabajo estructuren, junto con la Gobernación de Cundinamarca, el Centro Regional de Formalización, Seguridad Minera y Emergencias en el predio de Ubaté — acompañando la reactivación minera sin repetir los errores de informalidad que ya costaron vidas.</p>
+    </div>
+  </section>
+
+  <!-- 8. CIERRE -->
+  <section class="slide dark">
+    <div class="kicker">PRÓXIMO PASO</div>
+    <h2 class="head" style="max-width:22ch;">Una reunión técnica con la Agencia Nacional de Minería y el Ministerio de Trabajo.</h2>
+    <div class="rule"></div>
+    <p style="font-size:0.72rem; color:rgba(244,241,232,0.4); max-width:74ch; line-height:1.6;">Las cifras presentadas son estimaciones y datos públicos de referencia (ANM, Ministerio de Minas y Energía, prensa nacional, Prevención Integral/ORP Conference). Los valores definitivos del proyecto están sujetos a estudio técnico y financiero detallado antes de su ejecución.</p>
+  </section>
+
+</div></div>
+
+<script>
+  const track = document.getElementById('track');
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  const dotsWrap = document.getElementById('dots');
+  slides.forEach((_, i) => { const b = document.createElement('button'); b.addEventListener('click', () => goTo(i)); dotsWrap.appendChild(b); });
+  const dotEls = dotsWrap.querySelectorAll('button');
+  const progressLabel = document.getElementById('progressLabel');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+  function render(){
+    track.style.transform = `translateX(-${current * 100}vw)`;
+    dotEls.forEach((d,i) => d.classList.toggle('active', i === current));
+    progressLabel.textContent = `${pad(current+1)} / ${pad(total)}`;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === total - 1;
+  }
+  function goTo(i){ current = Math.max(0, Math.min(total - 1, i)); render(); }
+  btnPrev.addEventListener('click', () => goTo(current - 1));
+  btnNext.addEventListener('click', () => goTo(current + 1));
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'PageDown'){ goTo(current + 1); }
+    if(e.key === 'ArrowLeft'  || e.key === 'PageUp'){ goTo(current - 1); }
+  });
+  let touchStartX = null;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend', (e) => {
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50){ dx < 0 ? goTo(current + 1) : goTo(current - 1); }
+    touchStartX = null;
+  }, {passive:true});
+  document.querySelectorAll('table').forEach(t => {
+    const wrap = document.createElement('div'); wrap.className = 'table-scroll';
+    t.parentNode.insertBefore(wrap, t); wrap.appendChild(t);
+  });
+  render();
+</script>
+</body>
+</html>
