@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desarrollo Urbano Integral — Ubaté, Cundinamarca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!--
+  IMÁGENES REQUERIDAS — carpeta "assets/" junto a este archivo:
+    assets/cover.jpg   (vista aérea del predio o del casco urbano de Ubaté — portada)
+-->
+<style>
+  :root{
+    --navy: #0B1E30; --navy-2: #122942; --paper: #F4F1E8; --paper-2: #ECE7D8;
+    --brass: #A07C3B; --brass-light: #C9A36B; --ink: #161C26; --ink-soft: #303B47;
+    --green: #3A5A40; --red: #93493A; --rule: rgba(29,36,48,0.20); --rule-dark: rgba(244,241,232,0.16);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html, body{height:100%; overflow:hidden;}
+  body{font-family:'IBM Plex Sans', sans-serif; color:var(--ink); background:var(--navy); -webkit-font-smoothing:antialiased;}
+  #deck{position:relative; width:100vw; height:100vh; overflow:hidden;}
+  #track{display:flex; height:100vh; width:100%; transition:transform .75s cubic-bezier(.65,0,.35,1);}
+  .slide{flex:0 0 100vw; height:100vh; overflow-y:auto; padding:5vh 9vw; display:flex; flex-direction:column; justify-content:flex-start; position:relative;}
+  .slide > *:first-child{margin-top:auto;}
+  .slide > *:last-child{margin-bottom:auto;}
+  .slide::-webkit-scrollbar{display:none;}
+  .dark{background:var(--navy); color:var(--paper);}
+  .dark .ink-soft{color:rgba(244,241,232,0.62);}
+  .light{background:var(--paper);}
+  .light .ink-soft{color:var(--ink-soft);}
+  .kicker{font-family:'IBM Plex Mono', monospace; font-size:0.72rem; letter-spacing:0.02em; color:var(--brass); display:flex; align-items:center; gap:0.6rem; margin-bottom:1.6rem;}
+  .kicker::before{content:""; width:22px; height:1px; background:var(--brass); display:inline-block;}
+  .dark .kicker{color:var(--brass-light);}
+  .dark .kicker::before{background:var(--brass-light);}
+  h1.hero{font-family:'Newsreader', serif; font-weight:500; font-size:clamp(2.2rem, 4.6vw, 3.7rem); line-height:1.08; max-width:17ch;}
+  h2.head{font-family:'Newsreader', serif; font-weight:500; font-size:clamp(1.6rem, 2.8vw, 2.3rem); line-height:1.16; max-width:22ch; margin-bottom:1.8rem;}
+  .lede{font-family:'Newsreader', serif; font-style:italic; font-size:1.06rem; line-height:1.6; max-width:60ch; color:var(--ink-soft);}
+  .dark .lede{color:rgba(244,241,232,0.68);}
+  .rule{height:1px; background:var(--rule); width:100%; margin:1.7rem 0;}
+  .dark .rule{background:var(--rule-dark);}
+  .navctrl{position:fixed; z-index:80; top:50%; transform:translateY(-50%);}
+  .navctrl.prev{left:20px;} .navctrl.next{right:20px;}
+  .navctrl button{width:44px; height:44px; border-radius:50%; border:1px solid rgba(201,163,107,0.55); background:#0B1E30; box-shadow:0 4px 14px rgba(0,0,0,0.35); color:var(--paper); font-family:'IBM Plex Mono', monospace; font-size:1.15rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .2s ease, transform .2s ease, opacity .2s ease, border-color .2s ease;}
+  .navctrl button:hover{background:var(--brass); border-color:var(--brass); transform:scale(1.07);}
+  .navctrl button:disabled{opacity:0.3; cursor:default;}
+  @media (max-width:900px){ .navctrl{display:none;} }
+  #dots{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:9px; z-index:80; align-items:center; background:#0B1E30; box-shadow:0 4px 14px rgba(0,0,0,0.35); padding:9px 13px; border-radius:20px;}
+  #dots button{width:6px; height:6px; border-radius:50%; border:none; background:rgba(244,241,232,0.35); cursor:pointer; padding:0; transition:background .25s ease, transform .25s ease;}
+  #dots button:hover{background:rgba(244,241,232,0.6);}
+  #dots button.active{background:var(--brass-light); transform:scale(1.6);}
+  .progress-label{position:fixed; top:18px; left:50%; transform:translateX(-50%); font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.06em; color:rgba(244,241,232,0.85); z-index:80; pointer-events:none; background:#0B1E30; padding:6px 12px; border-radius:20px; box-shadow:0 4px 14px rgba(0,0,0,0.35);}
+  .photo-slide{padding:0;}
+  .photo-stage{position:absolute; inset:0; overflow:hidden; background:radial-gradient(ellipse at 30% 20%, #16324d 0%, #0B1E30 55%, #081522 100%);}
+  .photo-stage img{width:100%; height:100%; object-fit:cover; display:block;}
+  .photo-vignette{position:absolute; inset:0; background:linear-gradient(180deg, rgba(4,10,18,0.65) 0%, rgba(4,10,18,0.2) 30%, rgba(4,10,18,0.15) 55%, rgba(4,10,18,0.9) 100%); pointer-events:none;}
+  .photo-copy{position:absolute; inset:0; z-index:6; display:flex; flex-direction:column; justify-content:space-between; padding-top:5vh; padding-left:9vw; padding-right:9vw; padding-bottom:calc(5vh + 74px);}
+  .photo-top{display:flex; justify-content:space-between; align-items:flex-start;}
+  .brand, .confid{background:rgba(6,15,26,0.55); padding:6px 10px; border-radius:2px;}
+  .brand{font-family:'IBM Plex Mono', monospace; font-size:0.75rem; letter-spacing:0.03em; color:rgba(244,241,232,0.92);}
+  .confid{font-family:'IBM Plex Mono', monospace; font-size:0.64rem; letter-spacing:0.04em; color:rgba(244,241,232,0.75); text-align:right; line-height:1.6;}
+  .photo-copy .eyebrow{display:inline-block; font-family:'IBM Plex Mono', monospace; color:var(--brass-light); font-size:0.78rem; margin-bottom:1.1rem; background:rgba(6,15,26,0.55); padding:5px 10px; border-radius:2px;}
+  .photo-copy h1.hero{text-shadow:0 2px 22px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.5); color:var(--paper);}
+  .photo-bottom{display:grid; grid-template-columns:1fr auto 1fr; align-items:flex-end; gap:1.2rem; border-top:1px solid rgba(244,241,232,0.28); padding-top:1.4rem;}
+  .photo-bottom .stat{font-family:'IBM Plex Mono', monospace; font-size:0.74rem; color:rgba(244,241,232,0.85); text-shadow:0 1px 8px rgba(0,0,0,0.7);}
+  .photo-bottom .stat b{color:var(--paper); font-weight:500;}
+  .photo-bottom .stat.center{text-align:center; justify-self:center;}
+  .photo-bottom .stat.right{text-align:right; justify-self:end;}
+  table{width:100%; border-collapse:collapse;}
+  th, td{padding:0.75rem 0.6rem; text-align:right; font-size:0.9rem; border-bottom:1px solid var(--rule);}
+  th:first-child, td:first-child{text-align:left;}
+  th{font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:0.68rem; letter-spacing:0.02em; color:var(--ink-soft); padding-bottom:0.8rem;}
+  td{font-family:'IBM Plex Mono', monospace; font-size:0.88rem;}
+  td:first-child{font-family:'IBM Plex Sans', sans-serif; font-size:0.9rem;}
+  tr.total td{border-top:1px solid var(--ink); border-bottom:none; font-weight:600; padding-top:0.9rem;}
+  tr.highlight td{color:var(--green); font-weight:600;}
+  .col-brass{color:var(--brass); font-weight:600;}
+  .table-scroll{width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:2.4rem;}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:2rem;}
+  @media (max-width:820px){ .grid-2, .grid-3{grid-template-columns:1fr; gap:1.6rem;} }
+  .stat-block .num{font-family:'Newsreader', serif; font-size:2.1rem; font-weight:500; line-height:1;}
+  .stat-block .label{font-family:'IBM Plex Mono', monospace; font-size:0.7rem; color:var(--ink-soft); margin-top:0.5rem;}
+  .dark .stat-block .label{color:rgba(244,241,232,0.6);}
+  ul.plain{list-style:none;}
+  ul.plain li{position:relative; padding-left:1.3rem; margin-bottom:0.75rem; line-height:1.5; font-size:0.94rem;}
+  ul.plain li::before{content:"—"; position:absolute; left:0; color:var(--brass);}
+  .dark ul.plain li::before{color:var(--brass-light);}
+  .badge{display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.03em; padding:0.3rem 0.6rem; border:1px solid var(--brass); color:var(--brass); margin-bottom:1rem;}
+  .legal-box{border-left:2px solid var(--brass); padding-left:1rem; margin-top:1.2rem; background:rgba(160,124,59,0.06);}
+  .legal-box .legal-label{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; color:var(--brass); letter-spacing:0.03em; margin-bottom:0.35rem;}
+  .ask-box{border:1px solid var(--brass); padding:1.2rem 1.3rem; margin-top:1.4rem;}
+  .ask-box .ask-label{font-family:'IBM Plex Mono', monospace; font-size:0.66rem; color:var(--brass); letter-spacing:0.05em; margin-bottom:0.5rem;}
+  .dark .ask-box{border-color:var(--brass-light);}
+  .dark .ask-box .ask-label{color:var(--brass-light);}
+  .component-card{border:1px solid var(--rule); padding:1.1rem 1.2rem; height:100%;}
+  .component-card .comp-title{font-family:'Newsreader', serif; font-size:1.05rem; font-weight:500; margin-bottom:0.5rem;}
+  .component-card .comp-desc{font-size:0.86rem; color:var(--ink-soft); line-height:1.5;}
+  @media (max-width:700px){
+    .slide{padding:9vh 6vw 12vh;}
+    h1.hero{font-size:clamp(1.75rem, 7.5vw, 2.5rem); max-width:14ch;}
+    h2.head{font-size:clamp(1.3rem, 6vw, 1.7rem); max-width:18ch; margin-bottom:1.3rem;}
+    .lede{font-size:0.94rem;}
+    .grid-2, .grid-3{gap:1.5rem;}
+    .table-scroll table{min-width:440px;}
+    th, td{font-size:0.8rem; padding:0.6rem 0.45rem;}
+    .photo-top{flex-direction:column; gap:0.6rem;}
+    .confid{text-align:left;}
+    .photo-bottom{grid-template-columns:1fr; justify-items:start; gap:0.8rem;}
+    .photo-bottom .stat.center, .photo-bottom .stat.right{justify-self:start; text-align:left;}
+    .progress-label{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-label" id="progressLabel">01 / 11</div>
+<div class="navctrl prev"><button id="btnPrev" aria-label="Anterior">‹</button></div>
+<div class="navctrl next"><button id="btnNext" aria-label="Siguiente">›</button></div>
+<div id="dots"></div>
+
+<div id="deck"><div id="track">
+
+  <!-- 1. PORTADA -->
+  <section class="slide dark photo-slide">
+    <div class="photo-stage"><img src="assets/cover.jpg" alt="" onerror="this.style.display='none'"><div class="photo-vignette"></div></div>
+    <div class="photo-copy">
+      <div class="photo-top">
+        <div class="brand">HERRÁN QUINTERO &amp; CIA S.A.S. · UBATÉ, CUNDINAMARCA</div>
+        <div class="confid">PARA: GOBIERNO NACIONAL<br>GOBERNACIÓN DE CUNDINAMARCA · ALCALDÍA DE UBATÉ</div>
+      </div>
+      <div>
+        <div class="eyebrow">Propuesta de Desarrollo Urbano Integral — Septiembre 2026</div>
+        <h1 class="hero">Un predio de más de 100.000 m² para construir la próxima pieza urbana de la región.</h1>
+      </div>
+      <div class="photo-bottom">
+        <div class="stat">ÁREA DEL PREDIO<br><b>+100.000 m²</b></div>
+        <div class="stat center">TRAYECTORIA<br><b>43 años en desarrollo urbano de Ubaté</b></div>
+        <div class="stat right">POBLACIÓN REGIONAL<br><b>+150.000 habitantes</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. QUIÉNES PROPONEN -->
+  <section class="slide light">
+    <div class="kicker">QUIÉNES PROPONEN</div>
+    <h2 class="head">43 años construyendo el crecimiento urbano de Ubaté.</h2>
+    <p class="lede">Herrán Quintero & CIA S.A.S. ha participado activamente en el desarrollo inmobiliario de Ubaté desde 1982, mediante la urbanización y comercialización de suelo destinado principalmente a vivienda, y mediante la ejecución y entrega de obras de infraestructura vial y urbanística a título gratuito al municipio, contribuyendo a su consolidación y expansión ordenada.</p>
+    <div class="rule"></div>
+    <div class="grid-3">
+      <div class="stat-block"><div class="num">1982</div><div class="label">AÑO DE FUNDACIÓN DE LA COMPAÑÍA</div></div>
+      <div class="stat-block"><div class="num" style="color:var(--brass)">+100.000 m²</div><div class="label">PREDIO URBANO OBJETO DE ESTA PROPUESTA</div></div>
+      <div class="stat-block"><div class="num">Título gratuito</div><div class="label">OBRAS DE INFRAESTRUCTURA YA ENTREGADAS AL MUNICIPIO</div></div>
+    </div>
+  </section>
+
+  <!-- 3. EL ACTIVO -->
+  <section class="slide light">
+    <div class="kicker">EL ACTIVO</div>
+    <h2 class="head" style="margin-bottom:1.2rem;">Ubaté no es un municipio más — es el centro de servicios de nueve municipios.</h2>
+    <p class="lede" style="margin-bottom:1.4rem;">El municipio funciona como centro administrativo, comercial, financiero, educativo y de servicios para aproximadamente nueve municipios de su área de influencia, atendiendo una población regional superior a 150.000 habitantes. Cualquier intervención urbana de esta escala debe leerse desde una visión regional, no solo municipal.</p>
+    <div class="grid-3">
+      <div class="stat-block"><div class="num">9 municipios</div><div class="label">EN EL ÁREA DE INFLUENCIA DIRECTA DE UBATÉ</div></div>
+      <div class="stat-block"><div class="num" style="color:var(--brass)">+150.000 hab.</div><div class="label">POBLACIÓN REGIONAL ATENDIDA POR UBATÉ</div></div>
+      <div class="stat-block"><div class="num">+100.000 m²</div><div class="label">SUELO URBANO DISPONIBLE PARA ESTRUCTURAR</div></div>
+    </div>
+  </section>
+
+  <!-- 4. LA VISIÓN -->
+  <section class="slide dark">
+    <div class="kicker">LA VISIÓN</div>
+    <h2 class="head">No es un lote para vivienda — es el suelo para una pieza urbana completa.</h2>
+    <div class="grid-2">
+      <div>
+        <div class="legal-label" style="color:rgba(244,241,232,0.5); font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.03em; margin-bottom:0.6rem;">DESARROLLO INMOBILIARIO CONVENCIONAL</div>
+        <ul class="plain">
+          <li>Urbanizar y vender lotes o unidades de vivienda de forma aislada.</li>
+          <li>Un solo uso, sin planeación de equipamientos complementarios.</li>
+          <li>El valor del suelo se agota en la venta de las unidades construidas.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="legal-label" style="color:var(--brass-light); font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.03em; margin-bottom:0.6rem;">LO QUE SE PROPONE</div>
+        <ul class="plain">
+          <li>Vivienda articulada desde el diseño con salud, educación y empleo.</li>
+          <li>Espacio público, movilidad y equipamientos colectivos planificados como sistema.</li>
+          <li>El suelo se convierte en la base de una nueva pieza urbana, no en un producto agotable.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. LOS COMPONENTES -->
+  <section class="slide light">
+    <div class="kicker">LOS COMPONENTES</div>
+    <h2 class="head" style="margin-bottom:1.2rem;">Seis piezas, pensadas como un solo sistema urbano.</h2>
+    <div class="grid-3">
+      <div class="component-card"><div class="comp-title">Vivienda</div><div class="comp-desc">VIS y VIP para familias de menores ingresos. La Gobernación ya aprobó 440 VIP para Ubaté ($56.000M, obras desde ene. 2026) — el déficit rural de la región (~40% cualitativo, +20% cuantitativo) es varias veces ese tamaño.</div></div>
+      <div class="component-card"><div class="comp-title">Salud</div><div class="comp-desc">El nuevo Hospital El Salvador de Ubaté ($120.000M, anunciado jul. 2026) pasará de 34 a 72 servicios y sumará 83 camas — es el mismo hospital que hoy recibe, sin apoyo formal, a los heridos de la crisis minera de la provincia.</div></div>
+      <div class="component-card"><div class="comp-title">Educación</div><div class="comp-desc">La Regional Cundinamarca del SENA tiene centros dedicados en Bogotá, Soacha, Mosquera, Chía, Girardot, Fusagasugá y Villeta — ninguno en la provincia de Ubaté, pese a sus 150.000+ habitantes. Ver Propuesta 2 (Centro de Formación y Calidad Composicional), que propone cerrar exactamente ese vacío.</div></div>
+      <div class="component-card"><div class="comp-title">Empleo</div><div class="comp-desc">Cuando en 2023 se suspendió un solo título minero en Sutatausa tras una explosión, 1.300 trabajadores directos —casi el 20% de la población del municipio— perdieron su ingreso de un día para otro, sin salario fijo ni red de protección. Este proyecto aporta empleo formal y diversificado, no dependiente de un solo sector de alto riesgo.</div></div>
+      <div class="component-card"><div class="comp-title">Espacio público</div><div class="comp-desc">El estándar internacional (ONU) es 15 m² de espacio público efectivo por habitante. Medellín está en 4,95 m², Cali en 3,45 m² — porque retrofitting en ciudad consolidada es lento y costoso. Un desarrollo nuevo puede planificar hacia ese estándar desde el diseño, algo que ninguna ciudad ya construida puede hacer.</div></div>
+      <div class="component-card"><div class="comp-title">Actividad económica</div><div class="comp-desc">Buena parte de la economía de la cuenca (empezando por la lechera, ver Propuesta 1) opera hoy de forma informal. Usos comerciales y de servicios formales dentro del proyecto ayudan a formalizar esa actividad en el punto exacto donde se concentra.</div></div>
+    </div>
+    <p style="font-size:0.72rem; color:var(--ink-soft); margin-top:1rem; line-height:1.5;">Fuentes: Gobernación de Cundinamarca (proyecto VIP Ubaté, Podemos Casa 2; anuncio Hospital El Salvador, jul. 2026); DANE/Camacol (déficit habitacional rural, ECV 2024); El Tiempo, Blu Radio (impacto laboral, suspensión título minero Sutatausa, 2023); SENA Regional Cundinamarca (red de centros); prensa nacional (índice de espacio público efectivo, Medellín/Cali/Chía).</p>
+  </section>
+
+  <!-- 6. LA RUTA DE TRABAJO -->
+  <section class="slide light">
+    <div class="kicker">LA RUTA DE TRABAJO</div>
+    <h2 class="head" style="margin-bottom:1.4rem;">Antes de construir, una fase técnica de prefactibilidad y estructuración integral.</h2>
+    <div class="grid-2">
+      <div>
+        <ul class="plain">
+          <li>Diagnóstico territorial y regional de necesidades de vivienda, salud, educación y empleo.</li>
+          <li>Análisis urbanístico y normativo: usos, tratamientos, densidades y obligaciones urbanísticas.</li>
+          <li>Estudios técnicos preliminares: movilidad, servicios públicos, topografía y geotecnia.</li>
+          <li>Definición del programa urbanístico y las áreas por uso.</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="plain">
+          <li>Estructuración de fases de desarrollo, ejecutables progresivamente.</li>
+          <li>Modelo financiero: costos de urbanización y fuentes de financiación pública y privada.</li>
+          <li>Modelo de gestión y articulación institucional entre las entidades participantes.</li>
+          <li>Evaluación del impacto social y económico: viviendas, empleos y población beneficiada.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. MODELO DE ARTICULACIÓN -->
+  <section class="slide light">
+    <div class="kicker">MODELO DE ARTICULACIÓN INSTITUCIONAL</div>
+    <h2 class="head" style="margin-bottom:1.4rem;">Un proyecto de esta escala exige mesa técnica, no un trámite unilateral.</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Actor</th><th>Rol potencial en la estructuración</th></tr></thead>
+        <tbody>
+          <tr><td>Gobierno Nacional</td><td>Política de vivienda, educación, salud y formación para el trabajo</td></tr>
+          <tr><td>Gobernación de Cundinamarca</td><td>Articulación regional entre Ubaté y su área de influencia</td></tr>
+          <tr><td>Alcaldía de Ubaté</td><td>Norma urbanística, gestión del suelo y licenciamiento</td></tr>
+          <tr class="highlight"><td>Herrán Quintero & CIA S.A.S.</td><td>Propiedad del suelo, experiencia territorial y capacidad de gestión</td></tr>
+          <tr><td>Entidades sectoriales</td><td>SENA, Minvivienda, Minsalud, Mineducación — según el componente</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 8. POR QUÉ AHORA -->
+  <section class="slide light">
+    <div class="kicker">POR QUÉ AHORA</div>
+    <h2 class="head" style="margin-bottom:1.2rem;">Ubaté ya está en medio de la mayor ola de inversión estatal de su historia reciente.</h2>
+    <p class="lede" style="margin-bottom:1.4rem;">No se trata de generar impulso desde cero — se trata de estructurar, con visión integral, el crecimiento que el propio Estado ya está financiando en tres frentes simultáneos.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Frente</th><th>Inversión</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>Ruta de los Comuneros (doble calzada Zipaquirá–Ubaté–Chiquinquirá)</td><td>$750.000M+ (Invías + Gobernación)</td><td>En ejecución, nuevas fases 2026</td></tr>
+          <tr><td>Hospital El Salvador de Ubaté (34 → 72 servicios)</td><td>$120.000M</td><td>Anunciado jul. 2026</td></tr>
+          <tr class="highlight"><td>440 viviendas VIP (Podemos Casa 2)</td><td>$56.000M</td><td>Obras desde ene. 2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.72rem; color:var(--ink-soft); margin-top:0.8rem; line-height:1.5;">Fuentes: Invías, Gobernación de Cundinamarca (Secretaría de Salud e Infraestructura), comunicados oficiales 2026.</p>
+  </section>
+
+  <!-- 9. CÓMO LEER ESTA PROPUESTA -->
+  <section class="slide dark">
+    <div class="kicker">CÓMO LEER ESTA PROPUESTA</div>
+    <h2 class="head">No se pide ejecutar un proyecto ya definido — se pide abrir la mesa técnica para evaluarlo.</h2>
+    <div class="grid-2">
+      <div>
+        <div class="legal-label" style="color:rgba(244,241,232,0.5); font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.03em; margin-bottom:0.6rem;">CÓMO SE VE UNA SOLICITUD DE SUELO TÍPICA</div>
+        <ul class="plain">
+          <li>Un proyecto ya cerrado, presentado para aprobación o compra inmediata.</li>
+          <li>Negociación de precio antes de cualquier validación técnica.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="legal-label" style="color:var(--brass-light); font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.03em; margin-bottom:0.6rem;">CÓMO SE PLANTEA ESTA PROPUESTA</div>
+        <ul class="plain">
+          <li>Una fase conjunta de prefactibilidad, sin compromiso de ejecución previo.</li>
+          <li>Validación técnica e institucional antes de cualquier decisión de inversión.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ask-box">
+      <div class="ask-label">EL PUNTO CENTRAL</div>
+      <p style="font-size:0.94rem; line-height:1.7;">La intención no es solicitar al Gobierno Nacional la ejecución de un proyecto predeterminado, sino abrir un espacio institucional para estudiar conjuntamente si esta oportunidad de desarrollo urbano converge con las necesidades de la región y las políticas públicas vigentes.</p>
+    </div>
+  </section>
+
+  <!-- 10. LA SOLICITUD -->
+  <section class="slide light">
+    <div class="kicker">LA SOLICITUD</div>
+    <h2 class="head">Conformar una mesa técnica interinstitucional para evaluar la viabilidad del proyecto.</h2>
+    <div class="ask-box">
+      <div class="ask-label">LO QUE SE PIDE</div>
+      <p style="font-size:0.96rem; line-height:1.7;">Que el Gobierno Nacional, la Gobernación de Cundinamarca, la Alcaldía de Ubaté y las entidades sectoriales competentes conformen una mesa técnica interinstitucional, junto con Herrán Quintero & CIA S.A.S. como propietario del suelo, para determinar si las condiciones del predio, las necesidades regionales y la política pública vigente pueden converger en un modelo de articulación público-privada para vivienda y equipamientos sociales.</p>
+    </div>
+  </section>
+
+  <!-- 11. CIERRE -->
+  <section class="slide dark">
+    <div class="kicker">PRÓXIMO PASO</div>
+    <h2 class="head" style="max-width:24ch;">Más que poner a disposición un terreno, ponemos a disposición una oportunidad de construir ciudad.</h2>
+    <div class="rule"></div>
+    <p class="lede" style="margin-bottom:1.2rem;">Quedamos atentos a la posibilidad de presentar personalmente el predio y avanzar, junto con las entidades correspondientes, en la definición de una ruta de trabajo que permita evaluar su viabilidad y alcance.</p>
+    <div class="rule"></div>
+    <p style="font-size:0.72rem; color:rgba(244,241,232,0.4); max-width:74ch; line-height:1.6;">Documento base: comunicación de Herrán Quintero & CIA S.A.S. al Gobierno Nacional, septiembre 2026. Las cifras de contexto regional (población, municipios de influencia) son estimaciones de la compañía; los datos de infraestructura vial corresponden a fuentes públicas (Invías, Gobernación de Cundinamarca).</p>
+  </section>
+
+</div></div>
+
+<script>
+  const track = document.getElementById('track');
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  const dotsWrap = document.getElementById('dots');
+  slides.forEach((_, i) => { const b = document.createElement('button'); b.addEventListener('click', () => goTo(i)); dotsWrap.appendChild(b); });
+  const dotEls = dotsWrap.querySelectorAll('button');
+  const progressLabel = document.getElementById('progressLabel');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+  function render(){
+    track.style.transform = `translateX(-${current * 100}vw)`;
+    dotEls.forEach((d,i) => d.classList.toggle('active', i === current));
+    progressLabel.textContent = `${pad(current+1)} / ${pad(total)}`;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === total - 1;
+  }
+  function goTo(i){ current = Math.max(0, Math.min(total - 1, i)); render(); }
+  btnPrev.addEventListener('click', () => goTo(current - 1));
+  btnNext.addEventListener('click', () => goTo(current + 1));
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'PageDown'){ goTo(current + 1); }
+    if(e.key === 'ArrowLeft'  || e.key === 'PageUp'){ goTo(current - 1); }
+  });
+  let touchStartX = null;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend', (e) => {
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50){ dx < 0 ? goTo(current + 1) : goTo(current - 1); }
+    touchStartX = null;
+  }, {passive:true});
+  document.querySelectorAll('table').forEach(t => {
+    const wrap = document.createElement('div'); wrap.className = 'table-scroll';
+    t.parentNode.insertBefore(wrap, t); wrap.appendChild(t);
+  });
+  render();
+</script>
+</body>
+</html>
